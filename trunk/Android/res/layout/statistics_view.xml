@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	>
+
+	<LinearLayout
+		android:id="@+id/StatisticsTable"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		>
+
+		<TextView android:id="@+id/StatisticsGameName"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:textStyle="bold"
+			android:paddingBottom="10dip"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text=""/>
+
+		<TableLayout
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent">
+
+			<TableRow>
+				<TextView
+					android:text="@string/wins_text"
+					style="@style/statistics_left_text" />
+				<TextView
+					android:id="@+id/StatisticsWins"
+					android:text="0 (0.00%)"
+					style="@style/statistics_right_text" />
+			</TableRow>
+
+			<TableRow>
+				<TextView
+					android:text="@string/losses_text"
+					style="@style/statistics_left_text" />
+				<TextView
+					android:id="@+id/StatisticsLosses"
+					android:text="0 (0.00%)"
+					style="@style/statistics_right_text" />
+			</TableRow>
+
+			<TableRow>
+				<TextView
+					android:text="@string/total_text"
+					style="@style/statistics_left_text" />
+				<TextView
+					android:id="@+id/StatisticsTotal"
+					android:text="0"
+					style="@style/statistics_right_text" />
+			</TableRow>
+
+			<TableRow>
+				<TextView
+					android:text="@string/best_time_text"
+					style="@style/statistics_left_text" />
+				<TextView
+					android:id="@+id/StatisticsBestTime"
+					android:text="0:00"
+					style="@style/statistics_right_text" />
+			</TableRow>
+
+			<TableRow
+				android:id="@+id/StatisticsCurrentTimeRow">
+
+				<TextView
+					android:text="@string/current_time_text"
+					style="@style/statistics_left_text" />
+				<TextView
+					android:id="@+id/StatisticsCurrentTime"
+					android:text="0:00"
+					style="@style/statistics_right_text" />
+			</TableRow>
+
+		</TableLayout>
+
+	</LinearLayout>
+</ScrollView>

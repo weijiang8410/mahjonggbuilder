@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<com.anoshenko.android.toolbar.VerticalToolbar
+		android:id="@+id/PlayToolbar"
+		android:layout_width="56dip"
+		android:layout_height="fill_parent"
+		android:layout_alignParentLeft="true"
+		/>
+
+	<com.anoshenko.android.toolbar.VerticalToolbar
+		android:id="@+id/PlayToolbarRight"
+		android:layout_width="56dip"
+		android:layout_height="fill_parent"
+		android:layout_alignParentRight="true"
+		android:visibility="gone"
+		/>
+
+	<RelativeLayout
+		android:id="@+id/PlayTitle"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/PlayToolbar"
+		android:layout_toLeftOf="@id/PlayToolbarRight"
+		android:padding="2dip">
+
+		<TextView
+			android:id="@+id/PlayTimer"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:paddingLeft="8dip"
+			android:textStyle="bold"
+			android:textColor="#FFFFFF"
+			android:text="0:00" />
+
+		<TextView
+			android:id="@+id/PlayTitleText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_toLeftOf="@id/PlayTimer"
+			android:textStyle="bold"
+			android:textColor="#FFFFFF"
+			android:text="Title" />
+
+	</RelativeLayout>
+
+	<com.anoshenko.android.mahjongg.GameView
+		android:id="@+id/PlayArrea"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_toRightOf="@id/PlayToolbar"
+		android:layout_toLeftOf="@id/PlayToolbarRight"
+		android:layout_below="@id/PlayTitle"
+		/>
+
+</RelativeLayout>

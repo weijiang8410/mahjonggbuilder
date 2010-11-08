@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android" >
+
+	<PreferenceCategory
+		android:title="@string/game_options_group">
+
+		<ListPreference
+			android:key="@string/pref_orientation_key"
+			android:title="@string/pref_orientation_title"
+			android:entries="@array/orientation_items"
+			android:entryValues="@array/orientation_item_values"
+			android:defaultValue="3"
+			/>
+
+		<ListPreference
+			android:key="@string/pref_landscape_toolbar_key"
+			android:title="@string/pref_landscape_toolbar_title"
+			android:summary="@string/pref_landscape_toolbar_summary"
+			android:entries="@array/landscape_toolbar_items"
+			android:entryValues="@array/landscape_toolbar_values"
+			android:defaultValue="0"
+			/>
+
+		<ListPreference
+			android:key="@string/pref_start_tab_key"
+			android:title="@string/pref_start_tab_title"
+			android:entries="@array/start_tab_items"
+			android:entryValues="@array/start_tab_values"
+			android:defaultValue="0"
+			/>
+
+
+		<ListPreference
+			android:key="@string/pref_zoom_key"
+			android:title="@string/pref_zoom_title"
+			android:entries="@array/zoom_items"
+			android:entryValues="@array/zoom_item_values"
+			android:defaultValue="0"
+			/>
+
+
+		<ListPreference
+			android:key="@string/pref_shuffle_key"
+			android:title="@string/pref_shuffle_title"
+			android:summary="@string/pref_shuffle_summary"
+			android:entries="@array/shuffle_items"
+			android:entryValues="@array/shuffle_values"
+			android:defaultValue="1"
+			/>
+
+		<!--CheckBoxPreference
+			android:key="@string/pref_sound_key"
+			android:title="@string/pref_sound_title"
+			android:defaultValue="1"
+			/-->
+
+	</PreferenceCategory>
+
+</PreferenceScreen>
