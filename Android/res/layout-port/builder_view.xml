@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<RelativeLayout
+		android:id="@+id/BuilderTitle"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:padding="2dip">
+
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/BuilderInfoBlock"
+			android:layout_alignParentRight="true"
+			>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingRight="8dip"
+				android:paddingLeft="24dip"
+				android:textStyle="bold"
+				android:textColor="#FFFFFF"
+				android:text="@string/layer" />
+
+			<TextView
+				android:id="@+id/BuilderLayer"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textStyle="bold"
+				android:textColor="#FFFFFF"
+				android:text="1" />
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingRight="8dip"
+				android:paddingLeft="24dip"
+				android:textStyle="bold"
+				android:textColor="#FFFFFF"
+				android:text="@string/left" />
+
+			<TextView
+				android:id="@+id/BuilderLeft"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textStyle="bold"
+				android:textColor="#FFFFFF"
+				android:text="144" />
+
+		</LinearLayout>
+
+		<TextView
+			android:id="@+id/BuilderTitleText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_toLeftOf="@id/BuilderInfoBlock"
+			android:textStyle="bold"
+			android:textColor="#FFFFFF"
+			android:text="Title" />
+
+	</RelativeLayout>
+
+	<com.anoshenko.android.toolbar.HorizontalToolbar
+		android:id="@+id/BuilderToolbar"
+		android:layout_width="fill_parent"
+		android:layout_height="56dip"
+		android:layout_alignParentBottom="true"
+		/>
+
+	<com.anoshenko.android.mahjongg.GameView
+		android:id="@+id/BuilderArrea"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_above="@id/BuilderToolbar"
+		android:layout_below="@id/BuilderTitle"
+		/>
+
+</RelativeLayout>

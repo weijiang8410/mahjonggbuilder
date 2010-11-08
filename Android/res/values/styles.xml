@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+	<style name="statistics_left_text">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+		<item name="android:padding">8dip</item>
+		<item name="android:textColor">#FFFFFF</item>
+	</style>
+
+	<style name="statistics_right_text">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+		<item name="android:padding">8dip</item>
+		<item name="android:textColor">#FFFFFF</item>
+	</style>
+
+
+</resources>

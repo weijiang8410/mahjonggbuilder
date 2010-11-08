@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	>
+
+	<Spinner
+		android:id="@+id/BackgroundType"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		/>
+
+	<FrameLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/BackgroundType"
+		android:layout_alignParentBottom="true"
+		>
+
+		<RelativeLayout
+			android:id="@+id/GradientPage"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			>
+
+			<TableLayout
+				android:id="@+id/GradientColors"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_alignParentTop="true"
+				>
+
+				<TableRow>
+
+					<Button
+						android:id="@+id/GradientColor0"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="First Color"
+						/>
+
+					<Button
+						android:id="@+id/GradientColor1"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Second Color"
+						/>
+
+				</TableRow>
+
+			</TableLayout>
+
+			<GridView
+				android:id="@+id/GradientChooser"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/GradientColors"
+				android:layout_alignParentBottom="true"
+				android:numColumns="3"
+				android:horizontalSpacing="16dip"
+				android:verticalSpacing="16dip"
+				android:gravity="center"
+				android:columnWidth="100dip"
+				android:stretchMode="columnWidth"
+				/>
+
+		</RelativeLayout>
+
+		<GridView
+			android:id="@+id/BuildinChooser"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:numColumns="3"
+			android:horizontalSpacing="16dip"
+			android:verticalSpacing="16dip"
+			android:gravity="center"
+			android:columnWidth="100dip"
+			android:stretchMode="columnWidth"
+			/>
+
+	</FrameLayout>
+
+</RelativeLayout>
