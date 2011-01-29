@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -13,7 +12,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -172,32 +170,6 @@ public class Utils {
 		menu.add(Menu.NONE, Command.ABOUT, 3, R.string.about_item)
 			.setIcon(R.drawable.icon_info);
 
-		if (!isSolitairesInstalled(context)) {
-			menu.add(Menu.NONE, Command.SOLITAIRES, 4, R.string.solitaires_item)
-			.setIcon(R.drawable.icon_solitaires);
-		}
-
-	}
-
-	//--------------------------------------------------------------------------
-	final static String SOLITAIRES_PACKAGE = "com.anoshenko.android.solitaires";
-
-	final static boolean isSolitairesInstalled(Context context) {
-		PackageManager manager = context.getPackageManager();
-		try {
-			manager.getPackageInfo(SOLITAIRES_PACKAGE, 0);
-			return true;
-		} catch (NameNotFoundException e) {
-		}
-
-		return false;
-	}
-
-	//--------------------------------------------------------------------------
-	final static void installSolitaires(Context context) {
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setData(Uri.parse("market://details?id=" + SOLITAIRES_PACKAGE));
-		context.startActivity(intent);
 	}
 
 	//--------------------------------------------------------------------------

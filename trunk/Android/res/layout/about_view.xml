@@ -82,15 +82,16 @@
 
 	</RelativeLayout>
 
-
-	<TextView
+	<TextView android:id="@+id/text"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:paddingBottom="4dip"
+		android:paddingLeft="8dip"
+		android:paddingRight="8dip"
 		android:gravity="center"
-		android:textStyle="bold"
-		android:textColor="#FFFFFFFF"
-		android:paddingTop="24dip"
-		android:text="@string/copyright"/>
+		android:textStyle="normal"
+		android:autoLink="all"
+		android:text="@string/license"/>
 
 	<TextView android:id="@+id/text"
 		android:layout_width="fill_parent"
@@ -102,5 +103,14 @@
 		android:textStyle="normal"
 		android:autoLink="all"
 		android:text="@string/home_page"/>
+
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:textStyle="bold"
+		android:textColor="#FFFFFFFF"
+		android:paddingTop="24dip"
+		android:text="@string/copyright"/>
 
 </LinearLayout>

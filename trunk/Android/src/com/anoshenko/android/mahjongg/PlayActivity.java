@@ -103,6 +103,7 @@ public class PlayActivity extends BaseActivity {
 	private int mHint;
 
 	private int mShuffleLeft;
+	private int mAvailableMoves, mDiesLeft;
 
 	//--------------------------------------------------------------------------
 	@Override
@@ -399,7 +400,11 @@ public class PlayActivity extends BaseActivity {
 
 				if(mTimeTextView != null) {
 					int time = (int)((System.currentTimeMillis() - mStartTime) / 1000);
-					mTimeTextView.setText(String.format("%d:%02d", time / 60, time % 60));
+					mTimeTextView.setText(String.format("%d/%d  %du  %ds  %d:%02d",
+							mAvailableMoves, mDiesLeft,
+							mMemory.getRedoCount(),
+							mShuffleLeft,
+							time / 60, time % 60));
 				}
 
 				long delay = 1000 - (System.currentTimeMillis() - mStartTime) % 1000;
@@ -423,6 +428,12 @@ public class PlayActivity extends BaseActivity {
 			fTimePause = true;
 			mCurrentTime = System.currentTimeMillis() - mStartTime;
 		}
+	}
+
+	//--------------------------------------------------------------------------
+	void AddPenalty(int penalty) {
+		mStartTime -= 1000 * penalty;
+		gameTimeRunnable.run();
 	}
 
 	//--------------------------------------------------------------------------
@@ -483,6 +494,7 @@ public class PlayActivity extends BaseActivity {
 			PopupMenu menu = new PopupMenu(this, this);
 			menu.addItem(Command.PLAY, R.string.start_item, R.drawable.icon_start);
 			menu.addItem(Command.RESTART, R.string.restart_item, R.drawable.icon_restart);
+			menu.addItem(Command.SHUFFLE, R.string.shuffle_item, R.drawable.icon_shuffle);
 			menu.addItem(Command.AUTOPLAY, R.string.autoplay_item, R.drawable.icon_autoplay);
 			menu.addItem(Command.SET_BOOKMARK, R.string.bookmark_item, R.drawable.icon_bookmark);
 			menu.addItem(Command.BACK_BOOKMARK, R.string.back_bookmark_item, R.drawable.icon_bookmark_back);
@@ -510,6 +522,17 @@ public class PlayActivity extends BaseActivity {
 					Restart();
 				}
 			});
+			break;
+
+		case Command.SHUFFLE:
+			if (mShuffleLeft > 0) {
+				Utils.Question(this, R.string.shuffle_question, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						shuffle();
+					}
+				});
+			}
 			break;
 
 		case Command.SET_BOOKMARK:
@@ -611,17 +634,17 @@ public class PlayActivity extends BaseActivity {
 		}
 
 		updateAvailableList();
-
 		int count = mAvailableList.size();
-		boolean available_move = false;
-
+		int oldmAvailableMoves = mAvailableMoves;
+		mAvailableMoves = 0;
 		for (int i=0; i<count-1; i++)
 			if (mAvailableList.elementAt(i).Value == mAvailableList.elementAt(i+1).Value) {
-				available_move = true;
-				break;
+				mAvailableMoves++;
 			}
+		if (mAvailableMoves != oldmAvailableMoves)
+			gameTimeRunnable.run();
 
-		if (!available_move) {
+		if (mAvailableMoves == 0) {
 			if (mMode == AUTOPLAY_MODE)
 				autoplayFinish();
 
@@ -635,7 +658,7 @@ public class PlayActivity extends BaseActivity {
 
 	//--------------------------------------------------------------------------
 	private void shuffleQuestion() {
-		Utils.Question(this, R.string.shuffle_question, new DialogInterface.OnClickListener() {
+		Utils.Question(this, R.string.shuffle_question_no_moves, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				shuffle();
@@ -839,11 +862,15 @@ public class PlayActivity extends BaseActivity {
 		final int layer_height = mData.getLayerHeight();
 		int i, j, k;
 
+		mDiesLeft = 0;
 		for (i=0; i<layer_count; i++)
 			for (j=0; j<layer_height; j++)
 				for (k=0; k<layer_width; k++)
-					if (mLayer[i][j][k] >= 0 && isAvailable(i, j, k)) {
-						mAvailableList.add(new Die(mLayer[i][j][k], i, j, k));
+					if (mLayer[i][j][k] >= 0) {
+						mDiesLeft++;
+						if (isAvailable(i, j, k)) {
+							mAvailableList.add(new Die(mLayer[i][j][k], i, j, k));
+						}
 					}
 
 		Collections.sort(mAvailableList);
@@ -874,9 +901,9 @@ public class PlayActivity extends BaseActivity {
 		y -= y_layer_off;
 
 		int collumn1 = Math.max(0, (x - touch_arrea - cell_width) / cell_width);
-		int collumn2 = Math.min(layer_width - 1, (x - touch_arrea + cell_width - 1) / cell_width);
+		int collumn2 = Math.min(layer_width - 1, (x + touch_arrea + cell_width - 1) / cell_width);
 		int row1 = Math.max(0, (y - touch_arrea - cell_height) / cell_height);
-		int row2 = Math.min(layer_height - 1, (y - touch_arrea + cell_height - 1) / cell_height);
+		int row2 = Math.min(layer_height - 1, (y + touch_arrea + cell_height - 1) / cell_height);
 		Die die;
 		int dx, dy;
 
@@ -931,7 +958,10 @@ public class PlayActivity extends BaseActivity {
 	private void clickAction(int x, int y) {
 		Vector<Die> list = getTouchList(x, y);
 		if (list.size() > 0) {
-			if (mMarked.size() > 0) {
+			int marked_count = mMarked.size();
+			Die disabled = null;
+			
+			if (marked_count > 0) {
 				for (Die marked : mMarked)
 					for (Die die : list)
 						if (!die.equals(marked) && die.Value == marked.Value) {
@@ -944,23 +974,28 @@ public class PlayActivity extends BaseActivity {
 							return;
 						}
 
+				disabled = mMarked.get(0); 
 				Unmark();
-			} else {
-				for (Die die : list)
-					for (Die available : mAvailableList)
+			}
+
+			m: for (Die die : list)
+				for (Die available : mAvailableList)
+					if (disabled == null || disabled.Collumn != die.Collumn ||
+						disabled.Row != die.Row || disabled.Layer != die.Layer)
 						if (!die.equals(available) && die.Value == available.Value) {
 							mMarked.add(die);
-							break;
+							break m;
 						}
 
-				if (mMarked.size() == 0) {
-					mMarked.add(list.firstElement());
-				}
-
-				RedrawZBuffer();
-				mPlayView.invalidate();
+			if (mMarked.size() == 0) {
+				mMarked.add(list.firstElement());
 			}
+
+			RedrawZBuffer();
+			mPlayView.invalidate();
+			
 		} else {
+			
 			Unmark();
 		}
 	}
@@ -1218,6 +1253,7 @@ public class PlayActivity extends BaseActivity {
 		for (int i=mHint+1; i<mHintList.size(); i++)
 			if (die != mHintList.get(i).Value) {
 				setCurrentHint(i);
+				AddPenalty(30);
 				break;
 			}
 	}
@@ -1435,6 +1471,8 @@ public class PlayActivity extends BaseActivity {
 		int[] dies = new int[144];
 		int count = 0, i, j, k, n;
 
+		AddPenalty(600);
+
 		for (i=0; i<layer_count; i++)
 			for (j=0; j<layer_height; j++)
 				for (k=0; k<layer_width; k++)
@@ -1467,7 +1505,8 @@ public class PlayActivity extends BaseActivity {
 						n++;
 					}
 
-		mShuffleLeft--;
+		if (mShuffleLeft < 4) // 4 means unlimited
+			mShuffleLeft--;	
 		ResumeMove();
 	}
 }

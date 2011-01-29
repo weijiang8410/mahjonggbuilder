@@ -280,10 +280,6 @@ public abstract class BaseActivity extends Activity implements OnToolbarListener
 		case Command.SETTINGS:
 			startActivityForResult(new Intent(this, SettingsActivity.class), Command.SETTINGS_ACTIVITY);
 			break;
-
-		case Command.SOLITAIRES:
-			Utils.installSolitaires(this);
-			break;
 		}
 	}
 

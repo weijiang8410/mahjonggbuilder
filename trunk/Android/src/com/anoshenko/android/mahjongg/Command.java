@@ -56,7 +56,7 @@ final class Command {
 	final static int AUTOPLAY_STOP		= 149;
 	final static int AUTOPLAY_SLOW		= 150;
 	final static int AUTOPLAY_FAST		= 151;
-	final static int SOLITAIRES			= 152;
+	final static int SHUFFLE			= 152;
 
 	final static int PLAY_ACTIVITY			= 1001;
 	final static int BACKGROUND_ACTIVITY	= 1002;
