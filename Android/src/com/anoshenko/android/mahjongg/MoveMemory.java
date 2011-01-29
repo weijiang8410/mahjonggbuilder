@@ -99,6 +99,8 @@ class MoveMemory {
 	//--------------------------------------------------------------------------
 	void Undo() {
 		if (mUndoCount > 0) {
+			
+			mGame.AddPenalty(60);
 
 			mGame.Unmark();
 
@@ -126,6 +128,8 @@ class MoveMemory {
 	//--------------------------------------------------------------------------
 	void Redo() {
 		if (mRedoCount > 0) {
+
+			mGame.AddPenalty(-60); // undo Penalty
 
 			mGame.Unmark();
 
@@ -251,5 +255,9 @@ class MoveMemory {
 	//--------------------------------------------------------------------------
 	boolean isFull() {
 		return mUndoCount == mMemory.length;
+	}
+	//--------------------------------------------------------------------------
+	int getRedoCount() {
+		return mRedoCount;
 	}
 }

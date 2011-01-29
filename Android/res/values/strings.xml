@@ -5,8 +5,9 @@
 	<string name="app_description">\"Mahjongg Builder\" is a collection of 19 solitaire games where the player should remove all pieces from the game board.\nFind matching pairs of images from the both ends of lines of the game layout of pieces.\nThe editor of layout is built-in the program. Editor allow to create new game layout of pieces.</string>
 
 	<string name="version_text">Version</string>
-	<string name="copyright">© 2010, Alexei Anoshenko</string>
-	<string name="home_page">http://www.alexei-anoshenko.narod.ru</string>
+	<string name="license">License: GPL3\nhttp://www.gnu.org/licenses/gpl.html</string>
+	<string name="copyright">Developers: Alexei Anoshenko, Roland Meier</string>
+	<string name="home_page">Project Page:\nhttp://code.google.com/p/mahjonggbuilder/</string>
 
 	<string name="nameless">[nameless]</string>
 
@@ -47,6 +48,7 @@
 	<string name="statistics_item">Statistics</string>
 	<string name="start_item">Start new game</string>
 	<string name="restart_item">Restart game</string>
+	<string name="shuffle_item">Shuffle</string>
 	<string name="bookmark_item">Set bookmark</string>
 	<string name="back_bookmark_item">Back to bookmark</string>
 	<string name="info_item">Author and comment</string>
@@ -88,7 +90,8 @@
 	<string name="name_and_info_item">Name and description</string>
 	<string name="save_item">Save</string>
 
-	<string name="shuffle_question">No moves left.\nDo you want to shuffle?</string>
+	<string name="shuffle_question">Do you want to shuffle?</string>
+	<string name="shuffle_question_no_moves">No moves left.\nDo you want to shuffle?</string>
 	<string name="no_moves_start_question">No moves left. Sorry...\nDo you want to start new game?</string>
 	<string name="start_question">Are you sure you want to start new game?</string>
 	<string name="restart_question">Are you sure you want to restart current game?</string>

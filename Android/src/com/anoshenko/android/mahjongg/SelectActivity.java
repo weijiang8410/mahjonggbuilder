@@ -9,7 +9,6 @@ import java.util.Vector;
 import com.anoshenko.android.background.BackgroundActivity;
 import com.anoshenko.android.mahjongg.MahjonggData.LoadExeption;
 
-import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,7 +36,6 @@ public class SelectActivity extends TabActivity implements PopupMenu.Listener {
 	private final static String FAVORITES_KEY = "FAVORITES";
 	private final static char FAVORITE_SEPARATOR = ';';
 
-	private final static String SOLITAIRES_KEY = "SOLITAIRES";
 	private final static String CURRENT_PAGE_KEY = "CURRENT_PAGE";
 
 	private final Vector<MahjonggData> mFavorites = new Vector<MahjonggData>();
@@ -99,28 +97,6 @@ public class SelectActivity extends TabActivity implements PopupMenu.Listener {
 		mTabHost.setCurrentTab(current);
 
 		(new Thread(new GameLoader())).start();
-
-		boolean solitaires = prefs.getBoolean(SOLITAIRES_KEY, false);
-		if (!solitaires) {
-			if (!Utils.isSolitairesInstalled(this)) {
-				AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-
-				dialog.setMessage("I present my new free program \"250+ Solitaire Collection\".");
-				dialog.setPositiveButton("Install", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Utils.installSolitaires(SelectActivity.this);
-					}
-				});
-				dialog.setNegativeButton("Close", null);
-				dialog.setCancelable(true);
-				dialog.show();
-			}
-
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putBoolean(SOLITAIRES_KEY, true);
-			editor.commit();
-		}
 	}
 
 	//--------------------------------------------------------------------------
@@ -398,10 +374,6 @@ public class SelectActivity extends TabActivity implements PopupMenu.Listener {
 
 		case Command.BUILDER:
 			startBuilder(-1);
-			return true;
-
-		case Command.SOLITAIRES:
-			Utils.installSolitaires(this);
 			return true;
 		}
 
