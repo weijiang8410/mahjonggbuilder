@@ -2,262 +2,318 @@ package com.anoshenko.android.mahjongg;
 
 import java.util.Arrays;
 
+
 class MoveMemory {
+    private final PlayActivity mGame;
+    private Move[] mMemory = new Move[72];
+    private int mUndoCount = 0;
+    private int mRedoCount = 0;
+    private int mBookmarkCount = 0;
+    private int mMinUndoCount = 0;
+    private int mUndosPerformed = 0;
+    private int[] mBookmark = new int[10];
 
-	private class Move {
-		final int die1, layer1, x1, y1, die2, layer2, x2, y2;
+    //--------------------------------------------------------------------------
+    MoveMemory(PlayActivity game) {
+        mGame = game;
+    }
 
-		//----------------------------------------------------------------------
-		Move(int die1, int layer1, int x1, int y1, int die2, int layer2, int x2, int y2) {
-			this.die1	= die1;
-			this.layer1	= layer1;
-			this.x1		= x1;
-			this.y1		= y1;
-			this.die2	= die2;
-			this.layer2	= layer2;
-			this.x2		= x2;
-			this.y2		= y2;
-		}
+    //--------------------------------------------------------------------------
+    boolean isUndoAvailable() {
+        return mUndoCount > mMinUndoCount;
+    }
 
-		//----------------------------------------------------------------------
-		void Undo() {
-			mGame.mLayer[layer1][y1][x1] = die1;
-			mGame.mLayer[layer2][y2][x2] = die2;
-		}
+    //--------------------------------------------------------------------------
+    boolean isRedoAvailable() {
+        return mRedoCount > 0;
+    }
 
-		//----------------------------------------------------------------------
-		void Redo() {
-			mGame.mLayer[layer1][y1][x1] = -4;
-			mGame.mLayer[layer2][y2][x2] = -4;
-		}
+    //--------------------------------------------------------------------------
+    boolean isBookmarkExist() {
+        return mBookmarkCount > 0;
+    }
 
-		//----------------------------------------------------------------------
-		void Store(StringBuilder builder) {
-			builder.append((char)(die1 + 0x20));
-			builder.append((char)(layer1 + 0x20));
-			builder.append((char)(x1 + 0x20));
-			builder.append((char)(y1 + 0x20));
-			builder.append((char)(die2 + 0x20));
-			builder.append((char)(layer2 + 0x20));
-			builder.append((char)(x2 + 0x20));
-			builder.append((char)(y2 + 0x20));
-		}
-	}
+    //--------------------------------------------------------------------------
+    void Reset(boolean restart) {
+        mUndoCount = mRedoCount = mBookmarkCount = mMinUndoCount = 0;
+        if (!restart)
+        	mUndosPerformed = 0;
 
-	private final PlayActivity mGame;
-	private Move[] mMemory = new Move[72];
-	private int mUndoCount = 0, mRedoCount = 0, mBookmarkCount = 0;
-	private int[] mBookmark = new int[10];
+        for (int i = 0; i < mMemory.length; i++)
+            mMemory[i] = null;
 
-	//--------------------------------------------------------------------------
-	MoveMemory(PlayActivity game) {
-		mGame = game;
-	}
+        mGame.EnableRedoCommand(false);
+        mGame.EnableUndoCommand(false);
+    }
 
-	//--------------------------------------------------------------------------
-	boolean isUndoAvailable() {
-		return mUndoCount > 0;
-	}
+    //--------------------------------------------------------------------------
+    void add(int die1, int layer1, int x1, int y1, int die2, int layer2,
+        int x2, int y2) {
+        mMemory[mUndoCount] = new Move(die1, layer1, x1, y1, die2, layer2, x2,
+                y2);
 
-	//--------------------------------------------------------------------------
-	boolean isRedoAvailable() {
-		return mRedoCount > 0;
-	}
+        if (mUndoCount == mMinUndoCount) {
+            mGame.EnableUndoCommand(true);
+        }
 
-	//--------------------------------------------------------------------------
-	boolean isBookmarkExist() {
-		return mBookmarkCount > 0;
-	}
+        mUndoCount++;
 
-	//--------------------------------------------------------------------------
-	void Reset() {
-		mUndoCount = mRedoCount = mBookmarkCount = 0;
+        if (mRedoCount > 0) {
+            mGame.EnableRedoCommand(false);
+            mRedoCount = 0;
+        }
+    }
 
-		for (int i=0; i<mMemory.length; i++)
-			mMemory[i] = null;
+    //--------------------------------------------------------------------------
+    void Undo() {
+        if (mUndoCount > mMinUndoCount) {
+            mGame.AddPenalty(60);
 
-		mGame.EnableRedoCommand(false);
-		mGame.EnableUndoCommand(false);
-	}
+            mGame.Unmark();
 
-	//--------------------------------------------------------------------------
-	void add(int die1, int layer1, int x1, int y1, int die2, int layer2, int x2, int y2) {
+            mUndoCount--;
+            mUndosPerformed++;
+            mMemory[mUndoCount].Undo();
 
-		mMemory[mUndoCount] = new Move(die1, layer1, x1, y1, die2, layer2, x2, y2);
+            if (mUndoCount == mMinUndoCount) {
+                mGame.EnableUndoCommand(false);
+            }
 
-		if (mUndoCount == 0)
-			mGame.EnableUndoCommand(true);
+            if (mRedoCount == 0) {
+                mGame.EnableRedoCommand(true);
+            }
 
-		mUndoCount++;
+            mRedoCount++;
 
-		if (mRedoCount > 0) {
-			mGame.EnableRedoCommand(false);
-			mRedoCount = 0;
-		}
-	}
+            if (mBookmarkCount > 0) {
+                while ((mBookmarkCount > 0) &&
+                        (mBookmark[mBookmarkCount - 1] > mUndoCount))
+                    mBookmarkCount--;
+            }
 
-	//--------------------------------------------------------------------------
-	void Undo() {
-		if (mUndoCount > 0) {
-			
-			mGame.AddPenalty(60);
+            mGame.ResumeMove();
+        }
+    }
 
-			mGame.Unmark();
+    //--------------------------------------------------------------------------
+    void Redo() {
+        if (mRedoCount > 0) {
+            mGame.AddPenalty(-60); // undo Penalty
 
-			mUndoCount--;
-			mMemory[mUndoCount].Undo();
+            mGame.Unmark();
 
-			if (mUndoCount == 0)
-				mGame.EnableUndoCommand(false);
+            mMemory[mUndoCount].Redo();
+            mRedoCount--;
 
-			if (mRedoCount == 0)
-				mGame.EnableRedoCommand(true);
+            if (mRedoCount == 0) {
+                mGame.EnableRedoCommand(false);
+            }
 
-			mRedoCount++;
+            if (mUndoCount == mMinUndoCount) {
+                mGame.EnableUndoCommand(true);
+            }
 
-			if (mBookmarkCount > 0) {
-				while (mBookmarkCount > 0
-						&& mBookmark[mBookmarkCount - 1] > mUndoCount)
-					mBookmarkCount--;
-			}
+            mUndoCount++;
+            mUndosPerformed--;
 
-			mGame.ResumeMove();
-		}
-	}
+            mGame.ResumeMove();
+        }
+    }
 
-	//--------------------------------------------------------------------------
-	void Redo() {
-		if (mRedoCount > 0) {
+    //--------------------------------------------------------------------------
+    void setBookmark() {
+        if ((mBookmarkCount > 0) &&
+                (mBookmark[mBookmarkCount - 1] == mUndoCount)) {
+            return;
+        }
 
-			mGame.AddPenalty(-60); // undo Penalty
+        if (mBookmarkCount == mBookmark.length) {
+            int[] old = mBookmark;
 
-			mGame.Unmark();
+            mBookmark = new int[old.length * 2];
 
-			mMemory[mUndoCount].Redo();
-			mRedoCount--;
+            for (int i = 0; i < old.length; i++)
+                mBookmark[i] = old[i];
+        }
 
-			if (mRedoCount == 0)
-				mGame.EnableRedoCommand(false);
+        mBookmark[mBookmarkCount] = mUndoCount;
+        mBookmarkCount++;
+    }
 
-			if (mUndoCount == 0)
-				mGame.EnableUndoCommand(true);
+    //--------------------------------------------------------------------------
+    void backToBookmark() {
+        if ((mBookmarkCount > 0) &&
+                (mBookmark[mBookmarkCount - 1] == mUndoCount)) {
+            mBookmarkCount--;
+        }
 
-			mUndoCount++;
+        if (mBookmarkCount > 0) {
+            mBookmarkCount--;
 
-			mGame.ResumeMove();
-		}
-	}
+            mGame.Unmark();
 
-	//--------------------------------------------------------------------------
-	void setBookmark() {
-		if ((mBookmarkCount > 0) && (mBookmark[mBookmarkCount - 1] == mUndoCount))
-			return;
+            while ((mBookmark[mBookmarkCount] < mUndoCount) &&
+                    (mMinUndoCount < mUndoCount)) {
+                mUndoCount--;
+                mRedoCount++;
+                mUndosPerformed++;
+                mMemory[mUndoCount].Undo();
+                mGame.AddPenalty(60);
+            }
 
-		if (mBookmarkCount == mBookmark.length) {
-			int[] old = mBookmark;
+            if (mUndoCount == mMinUndoCount) {
+                mGame.EnableUndoCommand(false);
+            }
 
-			mBookmark = new int[old.length * 2];
-			for (int i = 0; i < old.length; i++)
-				mBookmark[i] = old[i];
-		}
+            if (mRedoCount > 0) {
+                mGame.EnableRedoCommand(true);
+            }
 
-		mBookmark[mBookmarkCount] = mUndoCount;
-		mBookmarkCount++;
-	}
+            mGame.ResumeMove();
+        }
+    }
 
-	//--------------------------------------------------------------------------
-	void backToBookmark() {
-		if ((mBookmarkCount > 0) && (mBookmark[mBookmarkCount - 1] == mUndoCount)) {
-			mBookmarkCount--;
-		}
+    //--------------------------------------------------------------------------
+    void Store(StringBuilder builder) {
+        builder.append((char) (0x20 + mUndoCount));
+        builder.append((char) (0x20 + mRedoCount));
+        builder.append((char) (0x20 + mBookmarkCount));
 
-		if (mBookmarkCount > 0) {
+        int i;
 
-			mBookmarkCount--;
+        for (i = 0; i < (mUndoCount + mRedoCount); i++)
+            mMemory[i].Store(builder);
 
-			mGame.Unmark();
+        for (i = 0; i < mBookmarkCount; i++)
+            builder.append((char) (0x20 + mBookmark[i]));
 
-			while (mBookmark[mBookmarkCount] < mUndoCount) {
-				mUndoCount--;
-				mRedoCount++;
-				mMemory[mUndoCount].Undo();
-			}
+        builder.append((char) (0x20 + mMinUndoCount));
+        builder.append((char) (0x20 + mUndosPerformed));
+    }
 
-			if (mUndoCount == 0)
-				mGame.EnableUndoCommand(false);
+    //--------------------------------------------------------------------------
+    void Load(String data) {
+        mUndoCount = (int) data.charAt(0) - 0x20;
+        mRedoCount = (int) data.charAt(1) - 0x20;
+        mBookmarkCount = (int) data.charAt(2) - 0x20;
 
-			if (mRedoCount > 0)
-				mGame.EnableRedoCommand(true);
+        int i;
+        int n = 3;
 
-			mGame.ResumeMove();
-		}
-	}
+        for (i = 0; i < (mUndoCount + mRedoCount); i++) {
+            mMemory[i] = new Move((int) data.charAt(n++) - 0x20,
+                    (int) data.charAt(n++) - 0x20,
+                    (int) data.charAt(n++) - 0x20,
+                    (int) data.charAt(n++) - 0x20,
+                    (int) data.charAt(n++) - 0x20,
+                    (int) data.charAt(n++) - 0x20,
+                    (int) data.charAt(n++) - 0x20, (int) data.charAt(n++) -
+                    0x20);
+        }
 
-	//--------------------------------------------------------------------------
-	void Store(StringBuilder builder) {
-		builder.append((char)(0x20 + mUndoCount));
-		builder.append((char)(0x20 + mRedoCount));
-		builder.append((char)(0x20 + mBookmarkCount));
+        for (i = 0; i < mBookmarkCount; i++) {
+            mBookmark[i] = (int) data.charAt(n++) - 0x20;
+        }
 
-		int i;
-		for (i = 0; i < (mUndoCount + mRedoCount); i++)
-			mMemory[i].Store(builder);
+        if (data.length() > n) {
+            mMinUndoCount = (int) data.charAt(n++) - 0x20;
+            mUndosPerformed = (int) data.charAt(n++) - 0x20;
+        } else {
+            mMinUndoCount = 0;
+            mUndosPerformed = 0;
+        }
 
-		for (i = 0; i < mBookmarkCount; i++)
-			builder.append((char)(0x20 + mBookmark[i]));
-	}
+        mGame.EnableRedoCommand(mRedoCount > 0);
+        mGame.EnableUndoCommand(mUndoCount > 0);
+    }
 
-	//--------------------------------------------------------------------------
-	void Load(String data) {
-		mUndoCount = (int) data.charAt(0) - 0x20;
-		mRedoCount = (int) data.charAt(1) - 0x20;
-		mBookmarkCount = (int) data.charAt(2) - 0x20;
+    //--------------------------------------------------------------------------
+    int[] getTrash() {
+        if (mUndoCount == 0) {
+            return null;
+        }
 
-		int i, n = 3;
-		for (i = 0; i < (mUndoCount + mRedoCount); i++) {
-			mMemory[i] = new Move(
-					(int) data.charAt(n) - 0x20,
-					(int) data.charAt(n + 1) - 0x20,
-					(int) data.charAt(n + 2) - 0x20,
-					(int) data.charAt(n + 3) - 0x20,
-					(int) data.charAt(n + 4) - 0x20,
-					(int) data.charAt(n + 5) - 0x20,
-					(int) data.charAt(n + 6) - 0x20,
-					(int) data.charAt(n + 7) - 0x20);
-			n += 8;
-		}
+        int[] result = new int[mUndoCount];
+        int n = 0;
 
-		for (i = 0; i < mBookmarkCount; i++) {
-			mBookmark[i] = (int) data.charAt(n) - 0x20;
-			n++;
-		}
+        for (int i = 0; i < mUndoCount; i++) {
+            result[n] = mMemory[i].die1;
+            n++;
+        }
 
-		mGame.EnableRedoCommand(mRedoCount > 0);
-		mGame.EnableUndoCommand(mUndoCount > 0);
-	}
+        Arrays.sort(result);
 
-	//--------------------------------------------------------------------------
-	int[] getTrash() {
-		if (mUndoCount == 0)
-			return null;
+        return result;
+    }
 
-		int[] result = new int[mUndoCount];
-		int n=0;
+    //--------------------------------------------------------------------------
+    boolean isFull() {
+        return mUndoCount == mMemory.length;
+    }
 
-		for (int i=0; i < mUndoCount; i++) {
-			result[n] = mMemory[i].die1; n++;
-		}
+    //--------------------------------------------------------------------------
+    int getUndosPerformed() {
+        return mUndosPerformed;
+    }
 
-		Arrays.sort(result);
-		return result;
-	}
+    //--------------------------------------------------------------------------
+    int getUndoCount() {
+        return mUndoCount;
+    }
 
-	//--------------------------------------------------------------------------
-	boolean isFull() {
-		return mUndoCount == mMemory.length;
-	}
-	//--------------------------------------------------------------------------
-	int getRedoCount() {
-		return mRedoCount;
-	}
+    //--------------------------------------------------------------------------
+    void disableUndo() {
+        mMinUndoCount = mUndoCount;
+        mRedoCount = 0;
+        mGame.EnableUndoCommand(false);
+        mGame.EnableRedoCommand(false);
+    }
+
+    private class Move {
+        final int die1;
+        final int layer1;
+        final int x1;
+        final int y1;
+        final int die2;
+        final int layer2;
+        final int x2;
+        final int y2;
+
+        //----------------------------------------------------------------------
+        Move(int die1, int layer1, int x1, int y1, int die2, int layer2,
+            int x2, int y2) {
+            this.die1 = die1;
+            this.layer1 = layer1;
+            this.x1 = x1;
+            this.y1 = y1;
+            this.die2 = die2;
+            this.layer2 = layer2;
+            this.x2 = x2;
+            this.y2 = y2;
+        }
+
+        //----------------------------------------------------------------------
+        void Undo() {
+            mGame.mLayer[layer1][y1][x1] = die1;
+            mGame.mLayer[layer2][y2][x2] = die2;
+        }
+
+        //----------------------------------------------------------------------
+        void Redo() {
+            mGame.mLayer[layer1][y1][x1] = -4;
+            mGame.mLayer[layer2][y2][x2] = -4;
+        }
+
+        //----------------------------------------------------------------------
+        void Store(StringBuilder builder) {
+            builder.append((char) (die1 + 0x20));
+            builder.append((char) (layer1 + 0x20));
+            builder.append((char) (x1 + 0x20));
+            builder.append((char) (y1 + 0x20));
+            builder.append((char) (die2 + 0x20));
+            builder.append((char) (layer2 + 0x20));
+            builder.append((char) (x2 + 0x20));
+            builder.append((char) (y2 + 0x20));
+        }
+    }
 }
