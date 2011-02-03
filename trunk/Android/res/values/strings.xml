@@ -58,7 +58,6 @@
 	<string name="settings_item">Settings</string>
 	<string name="background_item">Background</string>
 	<string name="builder_item">Create game</string>
-	<string name="solitaires_item">250+ Solitaire Collection</string>
 
 	<string name="add_single_item">Add single piece</string>
 	<string name="add_group_item">Add group of pieces</string>

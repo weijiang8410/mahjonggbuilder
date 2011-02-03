@@ -63,16 +63,17 @@ public class SelectActivity extends TabActivity implements PopupMenu.Listener {
 		Resources res = getResources();
 		TabHost.TabSpec tab;
 		Bitmap icon;
-
+		String[] aStart_tab_items = res.getStringArray(R.array.start_tab_items);
+		
 		icon = BitmapFactory.decodeResource(res, R.drawable.icon_favorites);
 		tab = mTabHost.newTabSpec(FAVORITES_TAG);
-		tab.setIndicator("Favorites", new BitmapDrawable(icon));
+		tab.setIndicator(aStart_tab_items[0], new BitmapDrawable(icon));
 		tab.setContent(R.id.FavoritesList);
 		mTabHost.addTab(tab);
 
 		icon = BitmapFactory.decodeResource(res, R.drawable.icon_all_games);
 		tab = mTabHost.newTabSpec(GAME_LIST_TAG);
-		tab.setIndicator("All games", new BitmapDrawable(icon));
+		tab.setIndicator(aStart_tab_items[1], new BitmapDrawable(icon));
 		tab.setContent(R.id.AllGamesList);
 		mTabHost.addTab(tab);
 
