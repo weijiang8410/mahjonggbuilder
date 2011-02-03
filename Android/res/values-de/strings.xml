@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="app_name">Mahjongg Builder</string>
+	<string name="app_description">\"Mahjongg Builder\" ist eine Sammlung von 19 Solitaire Spielen, bei denen der Spieler ale Steine vom Spielfeld entfernen muss.\nZwei Steine dürfen zusammen entfernt werden, wenn sie das gleiche Symbol zeigen und jeder der beiden frei liegt, d.h. es liegt keine anderer Stein darauf und mindestens ein Nachbarfeld der gleichen Reihe ist frei.\nMit einem Editor können neue Layouts erzeugt werden.</string>
+
+	<string name="version_text">Version</string>
+	<string name="license">Lizenz: GPL3\nhttp://www.gnu.org/licenses/gpl.html</string>
+	<string name="copyright">Entwickler: Alexei Anoshenko, Roland Meier</string>
+	<string name="home_page">Project Seite:\nhttp://code.google.com/p/mahjonggbuilder/</string>
+
+	<string name="nameless">[unbenannt]</string>
+
+	<string name="undo">Zurück</string>
+	<string name="redo">Wdh.</string>
+	<string name="trash">Ablage</string>
+	<string name="hint">Hilfe</string>
+	<string name="game">Spiel</string>
+
+	<string name="zoom_in">Zoom +</string>
+	<string name="zoom_out">Zoom -</string>
+
+	<string name="background_title">Hintergrund</string>
+
+	<string name="yes">Ja</string>
+	<string name="no">Nein</string>
+
+	<string name="close_button">Schließen</string>
+	<string name="cancel_button">Abbruch</string>
+	<string name="clear_button">Löschen</string>
+	<string name="exit_button">Ende</string>
+	<string name="start_button">Neues Spiel</string>
+	<string name="prev_button">Zurück</string>
+	<string name="next_button">Vor</string>
+
+	<string name="action_button">Aktion</string>
+	<string name="layer_button">Ebene</string>
+	<string name="scale_button">Maßstab</string>
+	<string name="more_button">Mehr</string>
+
+	<string name="stop_button">Stop</string>
+	<string name="slow_button">Langsamer</string>
+	<string name="fast_button">Schneller</string>
+
+	<string name="play_item">Spielen</string>
+	<string name="add_to_favorites_item">Zu Favoriten hinzufügen</string>
+	<string name="remove_favorite_item">Aus Favoriten entfernen</string>
+	<string name="statistics_item">Statistik</string>
+	<string name="start_item">Neues Spiel</string>
+	<string name="restart_item">Spiel neu starten</string>
+	<string name="shuffle_item">Mischen</string>
+	<string name="bookmark_item">Markierung setzen</string>
+	<string name="back_bookmark_item">Zurück zu Markierung</string>
+	<string name="info_item">Autor und Kommentar</string>
+	<string name="autoplay_item">Automatisch</string>
+
+	<string name="about_item">Über</string>
+	<string name="settings_item">Einstellungen</string>
+	<string name="background_item">Hintergrund</string>
+	<string name="builder_item">Neues Spiel editieren</string>
+
+	<string name="add_single_item">Stein hinzufügen</string>
+	<string name="add_group_item">Gruppe hinzufügen</string>
+	<string name="remove_item">Entfernen</string>
+	<string name="move_last_item">Letztes Fragment bewegen</string>
+	<string name="move_layer_item">Ebene bewegen</string>
+	<string name="move_all_item">Alles bewegen</string>
+	<string name="scroll_item">Scrollen</string>
+
+	<string name="edit_item">Editieren</string>
+	<string name="delete_item">Löschen</string>
+	<string name="publish_item">Fertig</string>
+
+	<string name="layer1_item">Ebene 1</string>
+	<string name="layer2_item">Ebene 2</string>
+	<string name="layer3_item">Ebene 3</string>
+	<string name="layer4_item">Ebene 4</string>
+	<string name="layer5_item">Ebene 5</string>
+	<string name="layer6_item">Ebene 6</string>
+	<string name="layer7_item">Ebene 7</string>
+	<string name="layer8_item">Ebene 8</string>
+
+	<string name="scale_1x_item">1x</string>
+	<string name="scale_2x_item">2x</string>
+	<string name="scale_3x_item">3x</string>
+
+	<string name="warning">Warnung</string>
+
+	<string name="name_and_info_item">Name und Beschreibung</string>
+	<string name="save_item">Save</string>
+
+	<string name="shuffle_question">Wollen Sie mischen?</string>
+	<string name="shuffle_question_no_moves">Kein Zug mehr möglich.\nWollen Sie mischen?</string>
+	<string name="no_moves_start_question">Kein Zug mehr möglich. Sorry...\nMöchten Sie ein neues Spiel beginnen?</string>
+	<string name="start_question">Sind Sie sicher, dass Sie ein neues Spiel beginnen möchten?</string>
+	<string name="restart_question">Sind Sie sicher, dass Sie das Spiel neu beginnen möchten?</string>
+	<string name="no_bookmark_note">Es gibt noch keine Markierungen.</string>
+	<string name="trash_is_empty">Die Ablage ist leer.</string>
+
+	<string name="already_in_favorites">Das Spiel \"%s\" ist schon bei den Favoriten.</string>
+	<string name="added_to_favorites">Das Spiel \"%s\" wurde zu den Favoriten hinzugefügt.</string>
+	<string name="remove_from_favorites">Wollen Sie das Spiel \"%s\" aus den Favoriten entfernen?</string>
+
+	<string name="delete_game">Wollen Sie das Spiel \"%s\" löschen?</string>
+
+	<string name="win_message">Glückwunsch!\nSie haben gewonnen!</string>
+	<string name="statistics_title">Statistik</string>
+	<string name="wins_text">Gewonnen</string>
+	<string name="losses_text">Verloren</string>
+	<string name="total_text">Zusammen</string>
+	<string name="current_time_text">Letzte Zeit</string>
+	<string name="best_time_text">Beste Zeit</string>
+
+	<string name="left">Verbleibend:</string>
+	<string name="layer">Ebene:</string>
+
+	<string name="game_name">Name des Spiels</string>
+	<string name="author">Autor</string>
+	<string name="comment">Kommentar</string>
+
+	<string name="disable_play">Es sind noch nicht alle Steine verteilt.\nDas Spiel kann noch nicht gespielt werden.</string>
+
+	<string name="editing_not_finished">Es sind noch nicht alle Steine verteilt.\nSind Sie sicher, dass Sie den Editor verlassen möchten?</string>
+	<string name="save_and_exit">Ja, speichern und beenden.</string>
+	<string name="exit_without_save">Ja, beenden ohne speichern.</string>
+	<string name="continue_editing">Nein, weiter editieren.</string>
+	<string name="no_name">Das Spiel hat noch keinen Namen.\nWollen Sie den Editor verlassen?</string>
+	<string name="set_name">Name</string>
+
+	<string name="game_options_group">Einstellungen</string>
+
+	<string name="pref_landscape_toolbar_key">LANDSCAPE_TOOLBAR</string>
+	<string name="pref_landscape_toolbar_title">Werkzeugleiste bei horizontaler Ausrichtung</string>
+	<string name="pref_landscape_toolbar_summary">Ort der Werkzeugleiste bei horizontaler Ausrichtung</string>
+
+	<string name="pref_start_tab_key">START_TAB</string>
+	<string name="pref_start_tab_title">Startseite</string>
+
+	<string name="pref_orientation_key">ORIENTATION</string>
+	<string name="pref_orientation_title">Ausrichtung</string>
+
+	<string name="pref_zoom_key">ZOOM_RATIO</string>
+	<string name="pref_zoom_title">Zoom Faktor</string>
+
+	<string name="pref_sound_key">SOUND</string>
+	<string name="pref_sound_title">Soundeffekte</string>
+
+	<string name="pref_shuffle_key">SHUFFLE</string>
+	<string name="pref_shuffle_title">Mischen</string>
+	<string name="pref_shuffle_summary">Mischen, wenn keine Züge mehr möglich.</string>
+
+</resources>
