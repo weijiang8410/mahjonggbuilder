@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<string name="app_name">Mahjongg Builder</string>
+	<string name="app_description">\"Mahjongg Builder\" это коллекция из 19 маджонг пасьянсов в которых Вы должны удалить все фишки с игрового поля.\nИщите парные фишки на концах линий игрового поля и убирайте их.\nВ программу встроен редактор игр, который позволяет создавать новые игры.</string>
+
+	<string name="version_text">Версия</string>
+	<string name="license">Лицензия: GPL3\nhttp://www.gnu.org/licenses/gpl.html</string>
+	<string name="copyright">Разработчики: Алексей Аношенко, Roland Meier</string>
+	<string name="home_page">Страница проекта:\nhttp://code.google.com/p/mahjonggbuilder/</string>
+
+	<string name="nameless">[без имени]</string>
+
+	<string name="undo">Откат</string>
+	<string name="redo">Возврат</string>
+	<string name="trash">Корзина</string>
+	<string name="hint">Подсказки</string>
+	<string name="game">Игра</string>
+
+	<string name="zoom_in">Приблизить</string>
+	<string name="zoom_out">Отодвинуть</string>
+
+	<string name="background_title">Фон</string>
+
+	<string name="yes">Да</string>
+	<string name="no">Нет</string>
+
+	<string name="close_button">Закрыть</string>
+	<string name="cancel_button">Отмена</string>
+	<string name="clear_button">Очистить</string>
+	<string name="exit_button">Выход</string>
+	<string name="start_button">Новая игра</string>
+	<string name="prev_button">Предадущий</string>
+	<string name="next_button">Следующий</string>
+
+	<string name="action_button">Действие</string>
+	<string name="layer_button">Слой</string>
+	<string name="scale_button">Масштаб</string>
+	<string name="more_button">Еще</string>
+
+	<string name="stop_button">Стоп</string>
+	<string name="slow_button">Медленее</string>
+	<string name="fast_button">Быстрее</string>
+
+	<string name="play_item">Играть</string>
+	<string name="add_to_favorites_item">Добавить в избранные</string>
+	<string name="remove_favorite_item">Удалить из избранных</string>
+	<string name="statistics_item">Статистика</string>
+	<string name="start_item">Начать новую игру</string>
+	<string name="restart_item">Начать игру сначала</string>
+	<string name="shuffle_item">Перемешать</string>
+	<string name="bookmark_item">Поставить закладку</string>
+	<string name="back_bookmark_item">Убрать закладку</string>
+	<string name="info_item">Автор и комментарий</string>
+	<string name="autoplay_item">Автоматическая игра</string>
+
+	<string name="about_item">О программе</string>
+	<string name="settings_item">Настройки</string>
+	<string name="background_item">Фон</string>
+	<string name="builder_item">Создать игру</string>
+
+	<string name="add_single_item">Добавить одну фишку</string>
+	<string name="add_group_item">Добавить группу фишек</string>
+	<string name="remove_item">Убрать</string>
+	<string name="move_last_item">Переместить последний фрагмент</string>
+	<string name="move_layer_item">Переместить слой</string>
+	<string name="move_all_item">Переместить все</string>
+	<string name="scroll_item">Сдвиг</string>
+
+	<string name="edit_item">Редактировать</string>
+	<string name="delete_item">Удалить</string>
+	<string name="publish_item">Опубликовать</string>
+
+	<string name="layer1_item">Слой 1</string>
+	<string name="layer2_item">Слой 2</string>
+	<string name="layer3_item">Слой 3</string>
+	<string name="layer4_item">Слой 4</string>
+	<string name="layer5_item">Слой 5</string>
+	<string name="layer6_item">Слой 6</string>
+	<string name="layer7_item">Слой 7</string>
+	<string name="layer8_item">Слой 8</string>
+
+	<string name="scale_1x_item">1x</string>
+	<string name="scale_2x_item">2x</string>
+	<string name="scale_3x_item">3x</string>
+
+	<string name="warning">Внимание</string>
+
+	<string name="name_and_info_item">Имя и описание</string>
+	<string name="save_item">Сохранить</string>
+
+	<string name="shuffle_question">Хотите перемешать фишки?</string>
+	<string name="shuffle_question_no_moves">Больше нет ходов.\nХотите перемешать фишки?</string>
+	<string name="no_moves_start_question">Больше нет ходов. Извините...\nХотите начать новую игру?</string>
+	<string name="start_question">Вы действительно хотите начать новую игру?</string>
+	<string name="restart_question">Вы действительно хотите начать игру сначала?</string>
+	<string name="no_bookmark_note">Закладок нет.</string>
+	<string name="trash_is_empty">Корзина пуста.</string>
+
+	<string name="already_in_favorites">Игра \"%s\" уже есть в Избранных.</string>
+	<string name="added_to_favorites">Игра \"%s\" успешно добавлен в Избранные.</string>
+	<string name="remove_from_favorites">Вы хотите удалить игру \"%s\" из Избранных?</string>
+
+	<string name="delete_game">Вы действительно хотите удалить игру \"%s\"?</string>
+
+	<string name="win_message">Поздравляю!!!\nВы выиграли!</string>
+	<string name="statistics_title">Статистика</string>
+	<string name="wins_text">Победы</string>
+	<string name="losses_text">Поражения</string>
+	<string name="total_text">Всего</string>
+	<string name="current_time_text">Текущее время</string>
+	<string name="best_time_text">Лучшее время</string>
+
+	<string name="left">Осталось:</string>
+	<string name="layer">Слой:</string>
+
+	<string name="game_name">Название игры</string>
+	<string name="author">Автор</string>
+	<string name="comment">Комментарий</string>
+
+	<string name="disable_play">Не все фишки размещены.\nВы не можете игрыть в эту игру.</string>
+
+	<string name="editing_not_finished">Не все фишки размещены.\nВы действительно хотите выйти из редактора?</string>
+	<string name="save_and_exit">Да. Сохранить игру и выйти.</string>
+	<string name="exit_without_save">Да. Выйти без сохранения.</string>
+	<string name="continue_editing">Нет. Продолжить редактирование.</string>
+	<string name="no_name">У игры нет названия.\nВы действительно хотите выйти из редактора?</string>
+	<string name="set_name">Задать название</string>
+
+	<string name="game_options_group">Настройки</string>
+
+	<string name="pref_landscape_toolbar_key">LANDSCAPE_TOOLBAR</string>
+	<string name="pref_landscape_toolbar_title">Кнопки в ландшафте</string>
+	<string name="pref_landscape_toolbar_summary">Положение панели кнопок в ландшафтной ориентации</string>
+
+	<string name="pref_start_tab_key">START_TAB</string>
+	<string name="pref_start_tab_title">Стартовая страница</string>
+
+	<string name="pref_orientation_key">ORIENTATION</string>
+	<string name="pref_orientation_title">Ориентация экрана</string>
+
+	<string name="pref_zoom_key">ZOOM_RATIO</string>
+	<string name="pref_zoom_title">Масштаб увеличения</string>
+
+	<string name="pref_sound_key">SOUND</string>
+	<string name="pref_sound_title">Разрешить звук</string>
+
+	<string name="pref_shuffle_key">SHUFFLE</string>
+	<string name="pref_shuffle_title">Перемешивание</string>
+	<string name="pref_shuffle_summary">Перемешивание если нет больше ходов.</string>
+
+</resources>
