@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+	<string-array name="orientation_items">
+		<item>По умолчанию</item>
+		<item>Портретная</item>
+		<item>Ландшафтная</item>
+		<item>По датчику положения</item>
+	</string-array>
+
+	<string-array name="orientation_item_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+	</string-array>
+
+	<string-array name="landscape_toolbar_items">
+		<item>С левой стороны</item>
+		<item>С правой стороны</item>
+	</string-array>
+
+	<string-array name="landscape_toolbar_values">
+		<item>0</item>
+		<item>1</item>
+	</string-array>
+
+	<string-array name="start_tab_items">
+		<item>Избранные</item>
+		<item>Все игры</item>
+	</string-array>
+
+	<string-array name="start_tab_values">
+		<item>0</item>
+		<item>1</item>
+	</string-array>
+
+	<string-array name="background_type_item_values">
+		<item>Градиент</item>
+		<item>Встроенные картинки</item>
+		<!--item>Gallery</item-->
+	</string-array>
+
+	<string-array name="zoom_items">
+		<item>1.5</item>
+		<item>2</item>
+		<item>2.5</item>
+	</string-array>
+
+	<string-array name="zoom_item_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+
+	<string-array name="shuffle_items">
+		<item>Disable</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>Unlimited</item>
+	</string-array>
+
+	<string-array name="shuffle_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+	</string-array>
+
+</resources>
