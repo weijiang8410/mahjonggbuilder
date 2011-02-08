@@ -3,10 +3,10 @@
 <resources>
 
 	<string-array name="orientation_items">
-		<item>По умолчанию</item>
-		<item>Портретная</item>
-		<item>Ландшафтная</item>
-		<item>По датчику положения</item>
+		<item>РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ</item>
+		<item>РџРѕСЂС‚СЂРµС‚РЅР°СЏ</item>
+		<item>Р›Р°РЅРґС€Р°С„С‚РЅР°СЏ</item>
+		<item>РџРѕ РґР°С‚С‡РёРєСѓ РїРѕР»РѕР¶РµРЅРёСЏ</item>
 	</string-array>
 
 	<string-array name="orientation_item_values">
@@ -17,8 +17,8 @@
 	</string-array>
 
 	<string-array name="landscape_toolbar_items">
-		<item>С левой стороны</item>
-		<item>С правой стороны</item>
+		<item>РЎ Р»РµРІРѕР№ СЃС‚РѕСЂРѕРЅС‹</item>
+		<item>РЎ РїСЂР°РІРѕР№ СЃС‚РѕСЂРѕРЅС‹</item>
 	</string-array>
 
 	<string-array name="landscape_toolbar_values">
@@ -27,8 +27,8 @@
 	</string-array>
 
 	<string-array name="start_tab_items">
-		<item>Избранные</item>
-		<item>Все игры</item>
+		<item>РР·Р±СЂР°РЅРЅС‹Рµ</item>
+		<item>Р’СЃРµ РёРіСЂС‹</item>
 	</string-array>
 
 	<string-array name="start_tab_values">
@@ -37,8 +37,8 @@
 	</string-array>
 
 	<string-array name="background_type_item_values">
-		<item>Градиент</item>
-		<item>Встроенные картинки</item>
+		<item>Р“СЂР°РґРёРµРЅС‚</item>
+		<item>Р’СЃС‚СЂРѕРµРЅРЅС‹Рµ РєР°СЂС‚РёРЅРєРё</item>
 		<!--item>Gallery</item-->
 	</string-array>
 
