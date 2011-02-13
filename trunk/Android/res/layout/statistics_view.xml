@@ -58,7 +58,8 @@
 			<TableRow>
 				<TextView
 					android:text="@string/best_time_text"
-					style="@style/statistics_left_text" />
+					style="@style/statistics_left_text"
+					android:id="@+id/StatisticsBestTimeName"/>
 				<TextView
 					android:id="@+id/StatisticsBestTime"
 					android:text="0:00"
@@ -67,13 +68,25 @@
 
 			<TableRow
 				android:id="@+id/StatisticsCurrentTimeRow">
-
 				<TextView
 					android:text="@string/current_time_text"
-					style="@style/statistics_left_text" />
+					style="@style/statistics_left_text"
+					android:id="@+id/StatisticsCurrentTimeName"/>
 				<TextView
 					android:id="@+id/StatisticsCurrentTime"
 					android:text="0:00"
+					style="@style/statistics_right_text" />
+			</TableRow>
+
+			<TableRow
+				android:id="@+id/StatisticsAvgRow">
+				<TextView
+					android:text="@string/statistics_average_text"
+					style="@style/statistics_left_text"
+					android:id="@+id/StatisticsAvgName"/>
+				<TextView
+					android:id="@+id/StatisticsAvg"
+					android:text="@string/statistics_average_value_text"
 					style="@style/statistics_right_text" />
 			</TableRow>
 
