@@ -708,10 +708,15 @@ public class PlayActivity extends BaseActivity {
 
             mData.increaseWins();
             PauseTime();
-            mData.updateBestTime((int) (mCurrentTime / 1000));
+            int mTime = (int) mCurrentTime / 1000;
+            int mPrevBestTime = mData.updateBestTime(mTime,
+            		mMemory.getUndosPerformed(),
+            		mShuffles);
+
             mData.storeStatistics();
 
-            StatisticsDialog.show(PlayActivity.this, mData, 0,
+            StatisticsDialog.show(PlayActivity.this, mData,
+            		mTime, mPrevBestTime,
                 new Runnable() {
                     @Override
                     public void run() {

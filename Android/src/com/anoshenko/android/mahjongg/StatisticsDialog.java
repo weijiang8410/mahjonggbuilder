@@ -3,6 +3,7 @@ package com.anoshenko.android.mahjongg;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,20 +36,20 @@ class StatisticsDialog {
 	}
 
 	//--------------------------------------------------------------------------
-	public static void show(Context context, MahjonggData data, int current_time,
+	public static void show(Context context, MahjonggData data, int current_time, int prev_best_time,
 			Runnable start_run, Runnable exit_run) {
 		Instance = new StatisticsDialog(context, data, start_run, exit_run);
-		Instance.show(true, current_time);
+		Instance.show(true, current_time, prev_best_time);
 	}
 
 	//--------------------------------------------------------------------------
 	public static void show(Context context, MahjonggData data) {
 		Instance = new StatisticsDialog(context, data);
-		Instance.show(false, -1);
+		Instance.show(false, -1, -1);
 	}
 
 	//--------------------------------------------------------------------------
-	private void show(boolean f_win_message, int current_time) {
+	private void show(boolean f_win_message, int current_time, int prev_best_time) {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 		view = LayoutInflater.from(mContext).inflate(R.layout.statistics_view, null);
@@ -93,19 +94,43 @@ class StatisticsDialog {
 		}
 
 		if(mData.getBestTime() > 0) {
+			text_view = (TextView)view.findViewById(R.id.StatisticsBestTimeName);
+			text_view.setText(current_time == mData.getBestTime() ? R.string.highscore_best_time_text : R.string.best_time_text);
 		    text_view = (TextView)view.findViewById(R.id.StatisticsBestTime);
 			text_view.setText(String.format("%d:%02d", mData.getBestTime() / 60, mData.getBestTime() % 60));
 		}
 
 		if (current_time >= 0) {
-			text_view = (TextView)view.findViewById(R.id.StatisticsCurrentTime);
-			text_view.setText(String.format("%d:%02d", current_time / 60, current_time % 60));
+			if (current_time == mData.getBestTime()) {
+				text_view = (TextView)view.findViewById(R.id.StatisticsCurrentTimeName);
+				text_view.setText(R.string.highscore_current_time_text);
+				text_view = (TextView)view.findViewById(R.id.StatisticsCurrentTime);
+				text_view.setText(String.format("%d:%02d", prev_best_time / 60, prev_best_time % 60));
+			} else {
+				text_view = (TextView)view.findViewById(R.id.StatisticsCurrentTimeName);
+				text_view.setText(R.string.current_time_text);
+				text_view = (TextView)view.findViewById(R.id.StatisticsCurrentTime);
+				text_view.setText(String.format("%d:%02d", current_time / 60, current_time % 60));
+			}
 		} else {
 			TableRow row = (TableRow)view.findViewById(R.id.StatisticsCurrentTimeRow);
 			row.setVisibility(View.GONE);
 		}
 
-		builder.setView(view);
+		if (mData.getAvgTotalGames() > 0) {
+			text_view = (TextView)view.findViewById(R.id.StatisticsAvg);
+			text_view.setText(String.format(mContext.getResources().getString(R.string.statistics_average_value_text),
+					(mData.getAvgTotalTime() / mData.getAvgTotalGames()) / 60,
+					(mData.getAvgTotalTime() / mData.getAvgTotalGames()) % 60,
+					(float) mData.getAvgUndos() / mData.getAvgTotalGames(),
+					(float) mData.getAvgShuffles() / mData.getAvgTotalGames(),
+					mData.getAvgTotalGames()));
+		} else {
+			TableRow row = (TableRow)view.findViewById(R.id.StatisticsAvgRow);
+			row.setVisibility(View.GONE);
+		}
+
+	builder.setView(view);
 		builder.setCancelable(true);
 		builder.setTitle(mData.getName());
 
@@ -142,7 +167,7 @@ class StatisticsDialog {
 				text_view = (TextView)view.findViewById(R.id.StatisticsBestTime);
 				text_view.setText("0:00");
 
-				show(false, -1);
+				show(false, -1, -1);
 			}
 		}
 	};

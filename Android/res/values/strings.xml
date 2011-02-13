@@ -108,8 +108,12 @@
 	<string name="wins_text">Wins</string>
 	<string name="losses_text">Losses</string>
 	<string name="total_text">Total</string>
-	<string name="current_time_text">Current time</string>
 	<string name="best_time_text">Best time</string>
+	<string name="current_time_text">Current time</string>
+	<string name="highscore_best_time_text">New best time!</string>
+	<string name="highscore_current_time_text">Prev. best time</string>
+	<string name="statistics_average_text">Average</string>
+	<string name="statistics_average_value_text">%1$d:%2$02d in %5$d games\n%3$.2fu %4$.2fs</string>
 
 	<string name="left">Left:</string>
 	<string name="layer">Layer:</string>

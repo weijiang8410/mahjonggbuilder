@@ -54,7 +54,8 @@ final class MahjonggData implements Comparable<MahjonggData> {
 	private int mLayerWidth;
 	private boolean mUnfinished = false;
 
-	private int mWins, mLosses, mBestTime;
+	private int mWins, mLosses, mBestTime,
+		mAvgTotalGames, mAvgTotalTime, mAvgUndos, mAvgShuffles;
 
 	//--------------------------------------------------------------------------
 	@SuppressWarnings("serial")
@@ -473,9 +474,32 @@ final class MahjonggData implements Comparable<MahjonggData> {
 	}
 
 	//--------------------------------------------------------------------------
-	final void updateBestTime(int time) {
+	final int getAvgTotalGames() {
+		return mAvgTotalGames;
+	}
+	//--------------------------------------------------------------------------
+	final int getAvgTotalTime() {
+		return mAvgTotalTime;
+	}
+	//--------------------------------------------------------------------------
+	final int getAvgUndos() {
+		return mAvgUndos;
+	}
+	//--------------------------------------------------------------------------
+	final int getAvgShuffles() {
+		return mAvgShuffles;
+	}
+
+	//--------------------------------------------------------------------------
+	final int updateBestTime(int time, int undos, int shuffles) {
+		int mPrevBestTime = mBestTime; 
 		if (mBestTime == 0 || time < mBestTime)
 			mBestTime = time;
+		mAvgTotalGames++;
+		mAvgTotalTime += time;
+		mAvgUndos += undos;
+		mAvgShuffles += shuffles;
+		return mPrevBestTime;
 	}
 
 	//--------------------------------------------------------------------------
@@ -487,16 +511,21 @@ final class MahjonggData implements Comparable<MahjonggData> {
 		String value = prefs.getString(key, null);
 
 		if (value != null) {
-			int pos = value.indexOf(SEPARATOR);
-			if (pos > 0) {
-				mWins = Integer.parseInt(value.substring(0, pos));
-				pos++;
-				int pos2 = value.indexOf(SEPARATOR, pos);
-				if (pos2 > 0) {
-					mLosses = Integer.parseInt(value.substring(pos, pos2));
-					mBestTime = Integer.parseInt(value.substring(pos2+1));
-				}
-			}
+			String[] fields = value.split(";");
+			mWins = (fields.length > 0) ? Integer.parseInt(fields[0]) : 0;
+			mLosses = (fields.length > 1) ? Integer.parseInt(fields[1]) : 0;
+			mBestTime = (fields.length > 2) ? Integer.parseInt(fields[2]) : 0;
+			mAvgTotalGames = (fields.length > 3) ? Integer.parseInt(fields[3]) : 0;
+			mAvgTotalTime = (fields.length > 4) ? Integer.parseInt(fields[4]) : 0;
+			mAvgUndos = (fields.length > 5) ? Integer.parseInt(fields[5]) : 0;
+			mAvgShuffles = (fields.length > 6) ? Integer.parseInt(fields[6]) : 0;
+		} else {
+			mLosses = 0;
+			mBestTime = 0;
+			mAvgTotalGames = 0;
+			mAvgTotalTime = 0;
+			mAvgUndos = 0;
+			mAvgShuffles = 0;
 		}
 	}
 
@@ -515,6 +544,14 @@ final class MahjonggData implements Comparable<MahjonggData> {
 		builder.append(mLosses);
 		builder.append(SEPARATOR);
 		builder.append(mBestTime);
+		builder.append(SEPARATOR);
+		builder.append(mAvgTotalGames);
+		builder.append(SEPARATOR);
+		builder.append(mAvgTotalTime);
+		builder.append(SEPARATOR);
+		builder.append(mAvgUndos);
+		builder.append(SEPARATOR);
+		builder.append(mAvgShuffles);
 
 		editor.putString(key, builder.toString());
 		editor.commit();
@@ -522,7 +559,9 @@ final class MahjonggData implements Comparable<MahjonggData> {
 
 	//--------------------------------------------------------------------------
 	void clearStatistics() {
-		mWins = mLosses = mBestTime = 0;
+		mWins = mLosses = mBestTime =
+			mAvgTotalGames = mAvgTotalTime =
+			mAvgUndos = mAvgShuffles = 0;
 	}
 
 	//--------------------------------------------------------------------------

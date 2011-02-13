@@ -107,9 +107,13 @@
 	<string name="statistics_title">Statistik</string>
 	<string name="wins_text">Gewonnen</string>
 	<string name="losses_text">Verloren</string>
-	<string name="total_text">Zusammen</string>
+	<string name="total_text">Spiele</string>
+	<string name="best_time_text">Bestzeit</string>
 	<string name="current_time_text">Letzte Zeit</string>
-	<string name="best_time_text">Beste Zeit</string>
+	<string name="highscore_best_time_text">Neue Bestzeit!</string>
+	<string name="highscore_current_time_text">Bisherige Bestzeit</string>
+	<string name="statistics_average_text">Durchschnitt</string>
+	<string name="statistics_average_value_text">%1$d:%2$02d in %5$d Spielen\n%3$.2fu %4$.2fs</string>
 
 	<string name="left">Verbleibend:</string>
 	<string name="layer">Ebene:</string>
