@@ -1155,8 +1155,13 @@ m:
             mDownX = mPrevX = x;
             mDownY = mPrevY = y;
             mDistance = 0;
-        } else if (mMode == PLAY_MODE) {
-            clickAction(x, y);
+        } else {
+        	if (mMode == HINT_MODE) {
+        		finishHintMode();
+       		}
+        	if (mMode == PLAY_MODE) {
+        		clickAction(x, y);
+            }
         }
     }
 
@@ -1702,6 +1707,7 @@ m:
         }
 
         mShuffles++;
+        gameTimeRunnable.run();
 
         ResumeMove();
     }
