@@ -20,8 +20,10 @@ import android.widget.TextView;
 
 import com.anoshenko.android.toolbar.ToolbarButton;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 import java.util.Vector;
 
 
@@ -605,7 +607,7 @@ public class PlayActivity extends BaseActivity {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            shuffle();
+                            shuffle(true);
                         }
                     });
             }
@@ -754,7 +756,7 @@ public class PlayActivity extends BaseActivity {
             new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    shuffle();
+                    shuffle(true);
                 }
             });
     }
@@ -788,7 +790,6 @@ public class PlayActivity extends BaseActivity {
         mToolbar.invalidate();
 
         mMemory.Reset(false);
-        setStartShuffleLeft();
 
         Utils.Deal(mStartDies);
 
@@ -810,8 +811,12 @@ public class PlayActivity extends BaseActivity {
                         mLayer[i][j][k] = FREE_PLACE;
                     }
 
-        updateAvailableList();
+        if (Integer.parseInt(getPreferenceValue(R.string.pref_deal_key, "0")) == 2)
+        	shuffle(false);
+        else
+        	updateAvailableList();
 
+        setStartShuffleLeft();
         mStartTime = System.currentTimeMillis();
         mCurrentTime = 0;
 
@@ -966,6 +971,21 @@ public class PlayActivity extends BaseActivity {
     }
 
     //--------------------------------------------------------------------------
+    private void updateAvailableMovesCount() {
+        Collections.sort(mAvailableList);
+	    mAvailableMoves = 0;
+	    for (int i = 0; i < mAvailableList.size() - 1; i++) {
+	        if (mAvailableList.elementAt(i).Value 
+	        		== mAvailableList.elementAt(i+1).Value) {
+	            mAvailableMoves++;
+		        if (i < mAvailableList.size() - 2 &&
+		        		mAvailableList.elementAt(i).Value 
+		        		== mAvailableList.elementAt(i+2).Value)
+		            mAvailableMoves++;
+	        }
+	    }
+    }
+    //--------------------------------------------------------------------------
     private void updateAvailableList() {
         mAvailableList.clear();
 
@@ -989,18 +1009,8 @@ public class PlayActivity extends BaseActivity {
                         }
                     }
 
-        Collections.sort(mAvailableList);
-
-        // calc available moves
         int oldmAvailableMoves = mAvailableMoves;
-        int count = mAvailableList.size();
-        mAvailableMoves = 0;
-
-        for (i = 0; i < (count - 1); i++)
-            if (mAvailableList.elementAt(i).Value == mAvailableList.elementAt(i +
-                        1).Value) {
-                mAvailableMoves++;
-            }
+        updateAvailableMovesCount();
 
         if (mAvailableMoves != oldmAvailableMoves) {
             gameTimeRunnable.run();
@@ -1613,103 +1623,332 @@ m:
     }
 
     //--------------------------------------------------------------------------
-    private void shuffle() {
+    private int getNeighbourStatus(int layer, int row, int collumn, int offset) {
+    	/* offset: 2 for searching to the right, -2 left
+    	 * return: -1 connected via empty places to occupied
+    	 * 			0 occupied itself
+    	 * 			1 all connected places unoccupied
+    	 * 			2 not in layout
+    	 */
+    	int status0, status1, status2;
+    	
+        if (!mData.isPlace(layer, row, collumn))
+            return 2;
+    	if (mLayer[layer][row][collumn] >= 0)
+            return 0;
+    	if ((offset < 0 && collumn < 2) ||
+    		(offset > 0	&& collumn > mData.getLayerWidth()-3))
+            return 1;
+    	
+    	status1 = getNeighbourStatus(layer, row, collumn+offset, offset);
+    	if (status1 <= 0) {
+            return -1;
+    	} else if (status1 == 1) {
+            return 1;
+    	} else if (row > 0){
+        	status0 = getNeighbourStatus(layer, row-1, collumn+offset, offset);
+    	} else {
+        	status0 = 2;
+    	}
+    	if (status0 <= 0) {
+            return -1;
+    	}
+    	if (row < mData.getLayerHeight()-1){
+        	status2 = getNeighbourStatus(layer, row+1, collumn+offset, offset);
+    	} else {
+        	status2 = 2;
+    	}
+    	if (status2 <= 0) {
+            return -1;
+    	} else {
+            return 1;
+    	}
+    }
+    //--------------------------------------------------------------------------
+    private boolean isAvailableForSolvableDealing(int layer, int row, int collumn) {
+        final int layer_width = mData.getLayerWidth();
+        final int layer_height = mData.getLayerHeight();
+        int x1 = (collumn > 0) ? (collumn - 1) : collumn;
+        int y1 = (row > 0) ? (row - 1) : row;
+        int x2 = (collumn < (layer_width - 1)) ? (collumn + 1) : collumn;
+        int y2 = (row < (layer_height - 1)) ? (row + 1) : row;
+
+        int i;
+        int j;
+        int k;
+
+        // in layout and empty
+        if (!mData.isPlace(layer, row, collumn) ||
+       		mLayer[layer][row][collumn] >= 0) {
+            return false;
+        }
+
+        // no empty place below
+        for (i = 0; i < layer; i++)
+            for (j = y1; j <= y2; j++)
+                for (k = x1; k <= x2; k++)
+                    if (mData.isPlace(i, j, k) && mLayer[i][j][k] < 0) {
+                        return false;
+                    }
+
+        // not connected via empty places to occupied
+    	int statusr0, statusr1, statusr2;
+    	int statusl0, statusl1, statusl2;
+    	// right half
+    	if (collumn <= layer_width-3) {
+    		statusr1 = getNeighbourStatus(layer, row, collumn+2, 2);
+	    	if (statusr1 < 0) {
+	            return false;
+	    	} else if (statusr1 == 0) {
+	        	return true; // test for rest unnecessary if always checked before
+	    	} else if (statusr1 == 2) {
+	    		if (row > 0){
+	    			statusr0 = getNeighbourStatus(layer, row-1, collumn+2, 2);
+			    	if (statusr0 < 0) {
+			            return false;
+			    	}
+	    		} else {
+	    			statusr0 = 2;
+	    		}
+		    	if (row < layer_height-1){
+	    			statusr2 = getNeighbourStatus(layer, row+1, collumn+2, 2);
+			    	if (statusr2 < 0) {
+			            return false;
+			    	}
+	    		} else {
+	    			statusr2 = 2;
+	    		}
+		    	if (statusr0 == 0 || statusr2 == 0) {
+		        	return true; // test for rest unnecessary if always checked before
+		    	}
+	    	}
+    	}
+    	// left half
+    	if (collumn >= 2) {
+    		statusl1 = getNeighbourStatus(layer, row, collumn-2, -2);
+	    	if (statusl1 < 0) {
+	            return false;
+	    	} else if (statusl1 == 0) {
+	        	return true; // test for rest unnecessary if always checked before
+	    	} else if (statusl1 == 2) {
+	    		if (row > 0){
+	    			statusl0 = getNeighbourStatus(layer, row-1, collumn-2, -2);
+			    	if (statusl0 < 0) {
+			            return false;
+			    	}
+	    		}
+		    	if (row < layer_height-1){
+	    			statusl2 = getNeighbourStatus(layer, row+1, collumn-2, -2);
+			    	if (statusl2 < 0) {
+			            return false;
+			    	}
+	    		}
+	    	}
+    	}
+    	// test for occupied places on both sides unnecessary if always checked before
+    	return true;
+    }
+
+   //--------------------------------------------------------------------------
+    private void shuffle(boolean inGame) {
+		Random r = new Random();
         final int layer_count = mData.getLayerCount();
         final int layer_width = mData.getLayerWidth();
         final int layer_height = mData.getLayerHeight();
-        int[] dies = new int[144];
+        int[] dies = new int[4*Utils.DIE_COUNT];
         int count = 0;
         int i;
         int j;
         int k;
         int n;
-
-        AddPenalty(600);
-        mMemory.disableUndo(); // undoing moves beyond this point would be cheating
+        int confDeals = Integer.parseInt(getPreferenceValue(
+                R.string.pref_deal_key, "0"));
+        Vector<Die> mUnAvailableList = new Vector<Die>();
+        // backup storage of initially (un)availavle places for solvable dealing
+        Vector<Die> m1AvailableList = new Vector<Die>();
+        Vector<Die> m1UnAvailableList = new Vector<Die>();
 
         for (i = 0; i < layer_count; i++)
             for (j = 0; j < layer_height; j++)
                 for (k = 0; k < layer_width; k++)
-                    if (mLayer[i][j][k] >= 0) {
-                        dies[count] = mLayer[i][j][k];
-                        count++;
-                    }
+                    if (mLayer[i][j][k] >= 0)
+                        dies[count++] = mLayer[i][j][k];
 
         int[] new_dies = new int[count];
-
-        for (j = count, k = 0; j > 1; j--, k++) {
-            n = (int) (Math.random() * j);
-
-            if (n >= j) {
-                n = j - 1;
-            }
-
-            new_dies[k] = dies[n];
-
-            for (i = n + 1; i < j; i++)
-                dies[i - 1] = dies[i];
+        if (confDeals == 2) {
+        	System.arraycopy(dies, 0, new_dies, 0, count);
+        	java.util.Arrays.sort(new_dies);
+        } else {
+	        for (j = count, k = 0; j > 1; j--, k++) {
+	            n = r.nextInt(j);
+	            if (n >= j) {
+	                n = j - 1;
+	            }
+	            new_dies[k] = dies[n];
+	            for (i = n + 1; i < j; i++)
+	                dies[i - 1] = dies[i];
+	        }
+	        new_dies[k] = dies[0];
+	        mAvailableList.clear();
         }
 
-        new_dies[k] = dies[0];
-
         n = 0;
-        mAvailableList.clear();
-
-        Vector<Die> mUnAvailableList = new Vector<Die>();
-
         for (i = 0; i < layer_count; i++)
             for (j = 0; j < layer_height; j++)
                 for (k = 0; k < layer_width; k++)
                     if (mLayer[i][j][k] >= 0) {
-                        mLayer[i][j][k] = new_dies[n];
-                        n++;
-
-                        if (isAvailable(i, j, k)) {
-                            mAvailableList.add(new Die(mLayer[i][j][k], i, j, k));
-                        } else {
-                            mUnAvailableList.add(new Die(mLayer[i][j][k], i, j,
-                                    k));
-                        }
+                    	if (confDeals == 2) {
+                    		mLayer[i][j][k] = FREE_PLACE;
+                            m1UnAvailableList.add(new Die(0, i, j, k));
+                    	} else {
+                    		mLayer[i][j][k] = new_dies[n++];
+	                        if (isAvailable(i, j, k)) {
+	                            mAvailableList.add(new Die(mLayer[i][j][k], i, j, k));
+	                        } else {
+	                            mUnAvailableList.add(new Die(mLayer[i][j][k], i, j, k));
+	                        }
+                    	}
                     }
 
-        // make sure at least one move is available if possible
-        Collections.sort(mAvailableList);
-        count = mAvailableList.size();
-        mAvailableMoves = 0;
+        if (confDeals == 0) {
+            updateAvailableMovesCount();
+        } else if (confDeals == 1) {
+	        // make sure at least one move is available if possible
+            count = mAvailableList.size();
+	        if ((mAvailableMoves == 0) && (count > 1)) {
+	            n = r.nextInt(count); // n: available die to search a partner for
+	
+	            do { // k: available die to swap with partner for n
+	                k = r.nextInt(count);
+	            } while (k == n);
+	
+	            do { // j: unavailable partner of n to swap with k
+	                j = r.nextInt(mUnAvailableList.size());
+	            } while (mUnAvailableList.elementAt(j).Value
+	            		!= mAvailableList.elementAt(n).Value);
+	
+	            i = mUnAvailableList.elementAt(j).Value;
+	
+	            mLayer[mUnAvailableList.elementAt(j).Layer][mUnAvailableList.elementAt(j).Row][mUnAvailableList.elementAt(j).Collumn] = mAvailableList.elementAt(k).Value;
+	
+	            mLayer[mAvailableList.elementAt(k).Layer][mAvailableList.elementAt(k).Row][mAvailableList.elementAt(k).Collumn] = i;
+	
+	            mAvailableMoves++;
+	            mAvailableList.removeElementAt(k);
+	            mAvailableList.add(mUnAvailableList.elementAt(j));
+	            updateAvailableMovesCount();
+	        }
+        } else if (confDeals == 2) {
+        	// create solvable deck
+            do {
+	            int new_count = count; // remember number of dies
+	        	// create lists of (un)available places for dealing
+	            for (i=0; i < m1UnAvailableList.size(); i++) {
+	            	if (isAvailableForSolvableDealing(
+	            			m1UnAvailableList.elementAt(i).Layer,
+	            			m1UnAvailableList.elementAt(i).Row,
+	            			m1UnAvailableList.elementAt(i).Collumn)) {
+                    	m1AvailableList.add(m1UnAvailableList.elementAt(i));
+                    	m1UnAvailableList.removeElementAt(i);
+                    	i--; // next element now has same index
+                    }
+	            }
+	            n = 0; // init number of tries
+	            do {
+	            	int l1, r1, c1, l2, r2, c2;
+	            	count = new_count; // restore field, both lists, working array of dies and count
+	            	System.arraycopy(new_dies, 0, dies, 0, count);
+	            	mAvailableList.clear();
+	            	for (Die die : m1AvailableList)
+	            		mAvailableList.add(new Die(die));
+	            	mUnAvailableList.clear();
+	            	for (Die die : m1UnAvailableList)
+	            		mUnAvailableList.add(new Die(die));
+	                for (i = 0; i < layer_count; i++)
+	                    for (j = 0; j < layer_height; j++)
+	                        for (k = 0; k < layer_width; k++)
+	                            if (mLayer[i][j][k] >= 0) {
+                            		mLayer[i][j][k] = FREE_PLACE;
+	                            }
+		            while (mAvailableList.size() > 1) {
+			            i = (r.nextInt(count)) & 0xfffe; // i / i+1: index in dies[] of pair to place 
+			            j = (r.nextInt(mAvailableList.size())); // j: index in mAvailableList of place for dies[i]
+			            l1 = mAvailableList.elementAt(j).Layer;
+			            r1 = mAvailableList.elementAt(j).Row;
+			            c1 = mAvailableList.elementAt(j).Collumn;
+			            mAvailableList.removeElementAt(j);
+		                k = r.nextInt(mAvailableList.size()); // k: index in mAvailableList of place for dies[i+1]
+			            l2 = mAvailableList.elementAt(k).Layer;
+			            r2 = mAvailableList.elementAt(k).Row;
+			            c2 = mAvailableList.elementAt(k).Collumn;
+			            mAvailableList.removeElementAt(k);
+			            mLayer[l1][r1][c1] =
+			            	mLayer[l2][r2][c2] =
+			            		dies[i]; // same as dies[i+1]
+			            if (i < count-2) {
+			            	System.arraycopy(dies, i+2, dies, i, count-2-i);
+			            }
+		            	count -= 2;
+			            // recheck all places in same layer and above newly placed dies
+			            for (i=0; i < mUnAvailableList.size(); i++) {
+			            	if (mUnAvailableList.elementAt(i).Layer == l1 ||
+			            		mUnAvailableList.elementAt(i).Layer == l2 ||
+			            		(Math.abs(r1 - mUnAvailableList.elementAt(i).Row) < 2 &&
+			            		 Math.abs(c1 - mUnAvailableList.elementAt(i).Collumn) < 2) ||
+			            		(Math.abs(r2 - mUnAvailableList.elementAt(i).Row) < 2 &&
+					             Math.abs(c2 - mUnAvailableList.elementAt(i).Collumn) < 2)) {
+		                        if (isAvailableForSolvableDealing(
+		                        		mUnAvailableList.elementAt(i).Layer, 
+		                        		mUnAvailableList.elementAt(i).Row, 
+		                        		mUnAvailableList.elementAt(i).Collumn)) {
+		                        	mAvailableList.add(mUnAvailableList.elementAt(i));
+		                        	mUnAvailableList.removeElementAt(i);
+		                        	i--; // next element now has same index
+		                        }
+			            	}
+			            } // for mUnAvailableList
+			            for (i=0; i < mAvailableList.size(); i++) {
+			            	if (mAvailableList.elementAt(i).Layer == l1 ||
+			            		mAvailableList.elementAt(i).Layer == l2 ||
+			            		(Math.abs(r1 - mAvailableList.elementAt(i).Row) < 2 &&
+			            		 Math.abs(c1 - mAvailableList.elementAt(i).Collumn) < 2) ||
+			            		(Math.abs(r2 - mAvailableList.elementAt(i).Row) < 2 &&
+					             Math.abs(c2 - mAvailableList.elementAt(i).Collumn) < 2)) {
+		                        if (!isAvailableForSolvableDealing(
+		                        		mAvailableList.elementAt(i).Layer, 
+		                        		mAvailableList.elementAt(i).Row, 
+		                        		mAvailableList.elementAt(i).Collumn)) {
+		                        	mUnAvailableList.add(mAvailableList.elementAt(i));
+		                        	mAvailableList.removeElementAt(i);
+		                        	i--; // next element now has same index
+		                        }
+			            	}
+			            } // for mAvailableList
+		            } // while (mAvailableList.size() > 1)
+	            } while (++n < 10 && mAvailableList.size() > 0);
+	            if (mAvailableList.size() > 0) {
+	            	// no solution found, max tries reached
+	                mAvailableList.clear();
+		            Utils.Question(this, String.format(getResources().getString(R.string.shuffle_maxtries), n),
+		                    new DialogInterface.OnClickListener() {
+		                        @Override
+		                        public void onClick(DialogInterface dialog, int which) {
+		                            mAvailableList.add(new Die(0, 0, 0, 0));
+		                        }
+		                    });
+	            }        	
+            } while (mAvailableList.size() > 0);
+            updateAvailableList();
+        } // if (confDeals == 2)
 
-        for (i = 0; i < (count - 1); i++)
-            if (mAvailableList.elementAt(i).Value == mAvailableList.elementAt(i +
-                        1).Value) {
-                mAvailableMoves++;
-            }
-
-        if ((mAvailableMoves == 0) && (count > 1)) {
-            n = (int) (Math.random() * count); // n: available die to search a partner for
-
-            do { // k: available die to swap with partner for n
-                k = (int) (Math.random() * count);
-            } while (k == n);
-
-            do { // j: unavailable partner of n to swap with k
-                j = (int) (Math.random() * mUnAvailableList.size());
-            } while (mUnAvailableList.elementAt(j).Value
-            		!= mAvailableList.elementAt(n).Value);
-
-            i = mUnAvailableList.elementAt(j).Value;
-
-            mLayer[mUnAvailableList.elementAt(j).Layer][mUnAvailableList.elementAt(j).Row][mUnAvailableList.elementAt(j).Collumn] = mAvailableList.elementAt(k).Value;
-
-            mLayer[mAvailableList.elementAt(k).Layer][mAvailableList.elementAt(k).Row][mAvailableList.elementAt(k).Collumn] = i;
-
-            mAvailableMoves++;
-            mAvailableList.removeElementAt(k);
-            mAvailableList.add(mUnAvailableList.elementAt(j));
+        if (inGame) {
+	        AddPenalty(600);
+	        mMemory.disableUndo(); // undoing moves beyond this point would be cheating
+	        mShuffles++;
+	        gameTimeRunnable.run();
+	        Unmark();
+	        ResumeMove();
         }
-
-        mShuffles++;
-        gameTimeRunnable.run();
-
-        ResumeMove();
     }
 
     private final class Die implements Comparable<Die> {
@@ -1724,6 +1963,13 @@ m:
             Layer = layer;
             Row = row;
             Collumn = collumn;
+        }
+
+        Die(Die d) {
+            Value = d.Value;
+            Layer = d.Layer;
+            Row = d.Row;
+            Collumn = d.Collumn;
         }
 
         @Override

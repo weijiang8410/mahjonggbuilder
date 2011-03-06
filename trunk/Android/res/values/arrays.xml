@@ -70,4 +70,16 @@
 		<item>4</item>
 	</string-array>
 
+	<string-array name="deal_items">
+		<item>Randomly</item>
+		<item>At least one move available</item>
+		<item>Solvable</item>
+	</string-array>
+
+	<string-array name="deal_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+
 </resources>
