@@ -1,5 +1,6 @@
 package com.anoshenko.android.mahjongg;
 
+import java.util.Random;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -90,6 +91,7 @@ public class Utils {
 	final static void Deal(int[] result) {
 		int[] work = new int[DIE_COUNT * 4];
 		int i, k, n = 0;
+		Random r = new Random();
 
 		for (i = 0; i < DIE_COUNT; i++)
 			for (k = 0; k < 4; k++) {
@@ -99,7 +101,7 @@ public class Utils {
 
 		n = DIE_COUNT * 4;
 		while (n > 1) {
-			k = (int) (Math.random() * n); // TODO
+			k = r.nextInt(n);
 			if (k < n) {
 				result[DIE_COUNT * 4 - n] = work[k];
 				for (i = k + 1; i < work.length; i++)

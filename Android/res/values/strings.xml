@@ -91,6 +91,7 @@
 
 	<string name="shuffle_question">Do you want to shuffle?</string>
 	<string name="shuffle_question_no_moves">No moves left.\nDo you want to shuffle?</string>
+	<string name="shuffle_maxtries">"No solvable deck found\nin %d tries. Go on trying?"</string>
 	<string name="no_moves_start_question">No moves left. Sorry...\nDo you want to start new game?</string>
 	<string name="start_question">Are you sure you want to start new game?</string>
 	<string name="restart_question">Are you sure you want to restart current game?</string>
@@ -151,6 +152,10 @@
 
 	<string name="pref_shuffle_key">SHUFFLE</string>
 	<string name="pref_shuffle_title">Shuffle</string>
-	<string name="pref_shuffle_summary">Shuffle if no moves left.</string>
+	<string name="pref_shuffle_summary">Number of shuffles if no moves left.</string>
+
+	<string name="pref_deal_key">DEAL</string>
+	<string name="pref_deal_title">Deal</string>
+	<string name="pref_deal_summary">Create easier decks.</string>
 
 </resources>
