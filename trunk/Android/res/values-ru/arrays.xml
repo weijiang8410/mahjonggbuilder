@@ -55,11 +55,11 @@
 	</string-array>
 
 	<string-array name="shuffle_items">
-		<item>Disable</item>
+		<item>Запрещено</item>
 		<item>1</item>
 		<item>2</item>
 		<item>3</item>
-		<item>Unlimited</item>
+		<item>Неограничено</item>
 	</string-array>
 
 	<string-array name="shuffle_values">
@@ -68,6 +68,18 @@
 		<item>2</item>
 		<item>3</item>
 		<item>4</item>
+	</string-array>
+
+	<string-array name="deal_items">
+		<item>Случайно</item>
+		<item>Доступен хотя бы один ход</item>
+		<item>Решаемый</item>
+	</string-array>
+
+	<string-array name="deal_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
 	</string-array>
 
 </resources>
