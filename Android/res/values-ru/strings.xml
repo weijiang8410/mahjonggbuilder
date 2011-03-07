@@ -92,6 +92,7 @@
 	<string name="shuffle_question">Хотите перемешать фишки?</string>
 	<string name="shuffle_question_no_moves">Больше нет ходов.\nХотите перемешать фишки?</string>
 	<string name="no_moves_start_question">Больше нет ходов. Извините...\nХотите начать новую игру?</string>
+	<string name="shuffle_maxtries">Не найдено решаемых раскладов в %d попытках. Продолжить попытки?"</string>
 	<string name="start_question">Вы действительно хотите начать новую игру?</string>
 	<string name="restart_question">Вы действительно хотите начать игру сначала?</string>
 	<string name="no_bookmark_note">Закладок нет.</string>
@@ -110,6 +111,10 @@
 	<string name="total_text">Всего</string>
 	<string name="current_time_text">Текущее время</string>
 	<string name="best_time_text">Лучшее время</string>
+	<string name="highscore_best_time_text">Новое лучшее время!</string>
+	<string name="highscore_current_time_text">Прошлое лучшее время</string>
+	<string name="statistics_average_text">Среднее</string>
+	<string name="statistics_average_value_text">%1$d:%2$02d в %5$d играх\n%3$.2fu %4$.2fs</string>
 
 	<string name="left">Осталось:</string>
 	<string name="layer">Слой:</string>
@@ -148,5 +153,12 @@
 	<string name="pref_shuffle_key">SHUFFLE</string>
 	<string name="pref_shuffle_title">Перемешивание</string>
 	<string name="pref_shuffle_summary">Перемешивание если нет больше ходов.</string>
+
+	<string name="pref_deal_key">DEAL</string>
+	<string name="pref_deal_title">Расдача</string>
+	<string name="pref_deal_summary">Создание облегченной раскладки.</string>
+
+	<string name="first_color">Первый цвет</string>
+	<string name="second_color">Второй цвет</string>
 
 </resources>

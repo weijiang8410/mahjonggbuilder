@@ -25,32 +25,41 @@
 			android:layout_height="fill_parent"
 			>
 
-			<TableLayout
+			<RelativeLayout
 				android:id="@+id/GradientColors"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:layout_alignParentTop="true"
 				>
 
-				<TableRow>
+				<LinearLayout
+					android:id="@+id/GradientColorsCenter"
+					android:layout_width="2dip"
+					android:layout_height="8dip"
+					android:layout_centerHorizontal="true"
+					/>
 
-					<Button
-						android:id="@+id/GradientColor0"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="First Color"
-						/>
+				<Button
+					android:id="@+id/GradientColor0"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:layout_toLeftOf="@id/GradientColorsCenter"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:text="@string/first_color"
+					/>
 
-					<Button
-						android:id="@+id/GradientColor1"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="Second Color"
-						/>
+				<Button
+					android:id="@+id/GradientColor1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentRight="true"
+					android:layout_toRightOf="@id/GradientColorsCenter"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:text="@string/second_color"
+					/>
 
-				</TableRow>
-
-			</TableLayout>
+			</RelativeLayout>
 
 			<GridView
 				android:id="@+id/GradientChooser"
