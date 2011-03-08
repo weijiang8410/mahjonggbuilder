@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.anoshenko.android.toolbar.ToolbarButton;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
