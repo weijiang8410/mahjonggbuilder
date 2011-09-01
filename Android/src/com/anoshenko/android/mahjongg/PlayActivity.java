@@ -1814,7 +1814,7 @@ m:
         } else if (confDeals == 1) {
 	        // make sure at least one move is available if possible
             count = mAvailableList.size();
-	        if ((mAvailableMoves == 0) && (count > 1)) {
+	        if ((mAvailableMoves == 0) && (count > 1) && (mUnAvailableList.size() > 0)) {
 	            n = r.nextInt(count); // n: available die to search a partner for
 	
 	            do { // k: available die to swap with partner for n

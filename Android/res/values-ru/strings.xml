@@ -161,4 +161,6 @@
 	<string name="first_color">Первый цвет</string>
 	<string name="second_color">Второй цвет</string>
 
+	<string name="out_of_memory">Не хватает памяти. Извините...</string>
+
 </resources>
