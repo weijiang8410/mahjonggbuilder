@@ -102,7 +102,13 @@ public class BuilderActivity extends BaseActivity {
 			for (int i=6; i<data.length()-1; i+=2) {
 				int row = data.charAt(i) - 'A';
 				int collumn = data.charAt(i+1) - 'A';
-				Series.add(new DieLocation(row, collumn));
+				DieLocation die_location = new DieLocation(row, collumn);
+				try {
+					Series.add(die_location);
+				} catch (OutOfMemoryError ex) {
+					System.gc();
+					Series.add(die_location);
+				}
 			}
 		}
 
@@ -678,10 +684,14 @@ public class BuilderActivity extends BaseActivity {
 	//--------------------------------------------------------------------------
 	private void removeSeries(Vector<DieLocation> series) {
 		for (int i=series.size()-1; i>=0; i--) {
-			DieLocation die = series.get(i);
-			mStartDies[mLeftDie] = mLayer[mCurrentLayer][die.Row][die.Collumn];
-			mLeftDie++;
-			mLayer[mCurrentLayer][die.Row][die.Collumn] = FREE_PLACE;
+			try {
+				DieLocation die = series.get(i);
+				mStartDies[mLeftDie] = mLayer[mCurrentLayer][die.Row][die.Collumn];
+				mLeftDie++;
+				mLayer[mCurrentLayer][die.Row][die.Collumn] = FREE_PLACE;
+			} catch (ArrayIndexOutOfBoundsException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 
@@ -954,48 +964,54 @@ public class BuilderActivity extends BaseActivity {
 
 	//--------------------------------------------------------------------------
 	private void shiftLayer(int layer_number, int vertical, int horizontal) {
-		int[][] layer = mLayer[layer_number];
-
-		if (horizontal < 0) {
-
-			for (int i=0; i<LAYER_HEIGHT; i++)
-				for (int k=0; k<LAYER_WIDTH+horizontal; k++)
-					layer[i][k] = layer[i][k-horizontal];
-
-			for (int i=0; i<LAYER_HEIGHT; i++)
-				for (int k=LAYER_WIDTH+horizontal; k<LAYER_WIDTH; k++)
-					layer[i][k] = FREE_PLACE;
-
-		} else if (horizontal > 0) {
-
-			for (int i=0; i<LAYER_HEIGHT; i++)
-				for (int k=LAYER_WIDTH-1; k>=horizontal; k--)
-					layer[i][k] = layer[i][k-horizontal];
-
-			for (int i=0; i<LAYER_HEIGHT; i++)
-				for (int k=0; k<horizontal; k++)
-					layer[i][k] = FREE_PLACE;
-		}
-
-		if (vertical < 0) {
-
-			for (int i=0; i<LAYER_HEIGHT+vertical; i++)
-				for (int k=0; k<LAYER_WIDTH; k++)
-					layer[i][k] = layer[i-vertical][k];
-
-			for (int i=LAYER_HEIGHT+vertical; i<LAYER_HEIGHT; i++)
-				for (int k=0; k<LAYER_WIDTH; k++)
-					layer[i][k] = FREE_PLACE;
-
-		} else if (vertical > 0) {
-
-			for (int i=LAYER_HEIGHT-1; i>=vertical; i--)
-				for (int k=0; k<LAYER_WIDTH; k++)
-					layer[i][k] = layer[i-vertical][k];
-
-			for (int i=0; i<vertical; i++)
-				for (int k=0; k<LAYER_WIDTH; k++)
-					layer[i][k] = FREE_PLACE;
+		
+		try {
+			int[][] layer = mLayer[layer_number];
+	
+			if (horizontal < 0) {
+	
+				for (int i=0; i<LAYER_HEIGHT; i++)
+					for (int k=0; k<LAYER_WIDTH+horizontal; k++)
+						layer[i][k] = layer[i][k-horizontal];
+	
+				for (int i=0; i<LAYER_HEIGHT; i++)
+					for (int k=LAYER_WIDTH+horizontal; k<LAYER_WIDTH; k++)
+						layer[i][k] = FREE_PLACE;
+	
+			} else if (horizontal > 0) {
+	
+				for (int i=0; i<LAYER_HEIGHT; i++)
+					for (int k=LAYER_WIDTH-1; k>=horizontal; k--)
+						layer[i][k] = layer[i][k-horizontal];
+	
+				for (int i=0; i<LAYER_HEIGHT; i++)
+					for (int k=0; k<horizontal; k++)
+						layer[i][k] = FREE_PLACE;
+			}
+	
+			if (vertical < 0) {
+	
+				for (int i=0; i<LAYER_HEIGHT+vertical; i++)
+					for (int k=0; k<LAYER_WIDTH; k++)
+						layer[i][k] = layer[i-vertical][k];
+	
+				for (int i=LAYER_HEIGHT+vertical; i<LAYER_HEIGHT; i++)
+					for (int k=0; k<LAYER_WIDTH; k++)
+						layer[i][k] = FREE_PLACE;
+	
+			} else if (vertical > 0) {
+	
+				for (int i=LAYER_HEIGHT-1; i>=vertical; i--)
+					for (int k=0; k<LAYER_WIDTH; k++)
+						layer[i][k] = layer[i-vertical][k];
+	
+				for (int i=0; i<vertical; i++)
+					for (int k=0; k<LAYER_WIDTH; k++)
+						layer[i][k] = FREE_PLACE;
+			}
+			
+		} catch (ArrayIndexOutOfBoundsException ex) {
+			
 		}
 	}
 
@@ -1121,7 +1137,9 @@ public class BuilderActivity extends BaseActivity {
 						}
 					}
 
-					if (remove_row >= 0) {
+					if (remove_row >= 0 && remove_row < layer.length && 
+						remove_collumn >= 0 && remove_collumn < layer[remove_row].length &&
+						mLeftDie < mStartDies.length) {
 
 						mStartDies[mLeftDie] = layer[remove_row][remove_collumn];
 						layer[remove_row][remove_collumn] = FREE_PLACE;

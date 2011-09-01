@@ -161,4 +161,6 @@
 	<string name="first_color">First Color</string>
 	<string name="second_color">Second Color</string>
 
+	<string name="out_of_memory">Not enough memory. Sorry...</string>
+
 </resources>

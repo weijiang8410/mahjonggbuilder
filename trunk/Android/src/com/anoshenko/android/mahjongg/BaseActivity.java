@@ -7,6 +7,8 @@ import com.anoshenko.android.toolbar.Toolbar;
 import com.anoshenko.android.toolbar.ToolbarButton;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -63,8 +65,28 @@ public abstract class BaseActivity extends Activity implements OnToolbarListener
 
 		Resources res = getResources();
 
-		for (int i=0; i<Utils.DIE_COUNT; i++)
-			mDieImage[i] = BitmapFactory.decodeResource(res, R.drawable.die00 + i);
+		for (int i=0; i<Utils.DIE_COUNT; i++) {
+			try {
+				mDieImage[i] = BitmapFactory.decodeResource(res, R.drawable.die00 + i);
+			} catch (OutOfMemoryError ex) {
+				System.gc();
+				try {
+					mDieImage[i] = BitmapFactory.decodeResource(res, R.drawable.die00 + i);
+				} catch (OutOfMemoryError ex2) {
+					AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+					dialog.setMessage(R.string.out_of_memory);
+					dialog.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							BaseActivity.this.finish();
+						}
+					});
+					dialog.setCancelable(false);
+					dialog.show();
+					return;
+				}
+			}
+		}
 	}
 
 	//--------------------------------------------------------------------------
@@ -308,7 +330,9 @@ public abstract class BaseActivity extends Activity implements OnToolbarListener
 		switch (requestCode) {
 		case Command.BACKGROUND_ACTIVITY:
 			mBackground.Load();
-			mBackground.updateImage(mZBuffer.getWidth(), mZBuffer.getHeight());
+			if (mZBuffer != null) {
+				mBackground.updateImage(mZBuffer.getWidth(), mZBuffer.getHeight());
+			}
 			RedrawZBuffer();
 			invalidateArrea();
 			break;
