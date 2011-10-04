@@ -1,29 +1,21 @@
 package com.anoshenko.android.mahjongg;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Vector;
+
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-
 import android.content.res.Resources;
-
 import android.graphics.Canvas;
-
 import android.os.Bundle;
-
 import android.preference.PreferenceManager;
-
 import android.util.DisplayMetrics;
-
 import android.view.KeyEvent;
 import android.view.Menu;
-
 import android.widget.TextView;
 
 import com.anoshenko.android.toolbar.ToolbarButton;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Random;
-import java.util.Vector;
 
 
 public class PlayActivity extends BaseActivity {
